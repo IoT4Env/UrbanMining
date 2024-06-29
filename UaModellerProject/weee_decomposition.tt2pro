@@ -1,0 +1,33 @@
+###########################
+# UaModeler Project File  #
+# Generated at 29.06.2024 #
+###########################
+
+PROJECTNAME = weee_decomposition
+
+TEMPLATESET = ($TEMPLATES)/net/v3_4/t1/net_server.tt2set
+
+MODELS += ($MODELS)/Opc.Ua.NodeSet2.ua \
+    weee_decomposition.ua
+
+VARIABLES+= weee_decomposition.ua: Namespace=WEEE; Organization=IoT4Env; 
+
+COLORS = ($MODELS)/Opc.Ua.NodeSet2.ua: #0000ff\
+    weee_decomposition.ua: #008000
+
+PROJECTVARIABLES += GenerateDefaultApplication = false \
+    GeneratePackagesConfig = false \
+    NetFramework = 4.5 \
+    ProjectNamespace = WEEE_Decomposition \
+    ProjectOrganization = 
+
+OUTPUTPATH = output
+
+GENERATE += weee_decomposition.ua
+
+NODEACCESSINFOROLES += Administrator \
+    SecurityAdmin \
+    ConfigurationAdmin \
+    Operator \
+    Observer
+
