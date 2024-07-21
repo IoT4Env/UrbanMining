@@ -1,4 +1,3 @@
-//import { OPCUAServer, Variant, DataType, StatusCodes} from "node-opcua"
 import { OpcUaServer } from "./opcuaServerLib.js";
 
 
@@ -8,8 +7,22 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     await server.initServer();
     console.log("initialized");
 
-    const namespace = server.getOwnNamespace()
+    const addressSpace = server.getAddressSpace()
+    const namespace = addressSpace.getOwnNamespace();
 
+    //#region  Type definition
+    const plcType = namespace.addObjectType({
+        browseName: "PlcType"
+    })
+    //#endregion
+
+
+    plcType.instantiate({
+        browseName: "plc1",
+        organizedBy: addressSpace.rootFolder.objects
+    })
+
+    
     await server.startServer()
     server.stopServerListener()
 })()
