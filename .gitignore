@@ -1,3 +1,4 @@
 DrawioDiagrams/*.bkp
 Server/node_modules
 Client/venv
+Client/__pycache__
