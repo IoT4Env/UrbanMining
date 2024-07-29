@@ -31,10 +31,10 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         enumeration: settings
     })
     
-    const status = ["On", "Off", "Functioning", "Danger"]
+    const statuses = ["On", "Off", "Functioning", "Danger"]
     namespace.addEnumerationType({
-        browseName: "Status",
-        enumeration: status
+        browseName: "Statuses",
+        enumeration: statuses
     })
 
     const functionalities = ["Controller", "Separator"]
@@ -54,9 +54,52 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     //#region  Type definition
 
     //#region PlatformType
-    // const platformType = namespace.addObjectType({
-    //     browseName: 
-    // })
+    const platformType = namespace.addObjectType({
+        browseName: "PlatformType"
+    })
+
+    namespace.addVariable({
+        browseName: "Setting",
+        componentOf: platformType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Id",
+        componentOf: platformType,
+        dataType: DataType.Int16,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Status",
+        componentOf: platformType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Direction",
+        componentOf: platformType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "PowerConsuption",
+        componentOf: plcType,
+        dataType: DataType.Double,
+        modellingRule: "Mandatory",
+    })
+
+    namespace.addVariable({
+        browseName: "WorkingMaterial",
+        componentOf: platformType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+    //#endregion
 
     //#region PlcType
     const plcType = namespace.addObjectType({
