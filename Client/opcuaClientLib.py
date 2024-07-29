@@ -19,5 +19,12 @@ class opcuaClient:
         children = objects.get_children()#get all istances inside the object node
         return children[3:len(children)]#ours instances can be found past the third element
     
+    def show_values(self, instances):
+        for instance in instances:
+            children = instance.get_children()
+            print(f'{instance.get_browse_name().Name}:')#name property is the name of the instance
+            for child in children:
+                print(f'\t{child.get_browse_name().Name}:{child.get_value()}')
+
     def disconnect(self):
         self.client.disconnect()

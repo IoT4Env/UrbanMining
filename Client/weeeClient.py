@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
         own_instances = client.get_own_instances()
 
-        print(own_instances)
+        client.show_values(own_instances)
 
     except Exception as error:
         print(error)
