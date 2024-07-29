@@ -88,7 +88,7 @@ import { OpcUaServer } from "./opcuaServerLib.js";
 
     namespace.addVariable({
         browseName: "PowerConsuption",
-        componentOf: plcType,
+        componentOf: platformType,
         dataType: DataType.Double,
         modellingRule: "Mandatory",
     })
@@ -99,6 +99,62 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         dataType: DataType.String,
         modellingRule: "Mandatory"
     })
+    //#endregion
+
+    //#region Weight PlatformType
+    const weightPlatformType = namespace.addObjectType({
+        browseName: "WeightPlatformType"
+    })
+
+    namespace.addObject({
+        browseName: "WeightH",
+        typeDefinition: platformType,
+        componentOf: weightPlatformType,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addObject({
+        browseName: "WeightM",
+        typeDefinition: platformType,
+        componentOf: weightPlatformType,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addObject({
+        browseName: "WeightL",
+        typeDefinition: platformType,
+        componentOf: weightPlatformType,
+        modellingRule: "Mandatory"
+    })
+
+    //#endregion
+
+    //#region Density PlatformType
+    const densityPlatformType = namespace.addObjectType({
+        browseName: "DensityPlatformType"
+    })
+
+    namespace.addObject({
+        browseName: "DensityH",
+        typeDefinition: platformType,
+        componentOf: densityPlatformType,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addObject({
+        browseName: "DensityM",
+        typeDefinition: platformType,
+        componentOf: densityPlatformType,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addObject({
+        browseName: "DensityL",
+        typeDefinition: platformType,
+        componentOf: densityPlatformType,
+        modellingRule: "Mandatory"
+    })
+
     //#endregion
 
     //#region PlcType
@@ -119,7 +175,7 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.String,
         modellingRule: "Mandatory",
-        value: {dataType: DataType.String, value: status[2]}
+        value: {dataType: DataType.String, value: statuses[2]}
     })
 
     namespace.addVariable({
