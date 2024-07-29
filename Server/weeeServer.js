@@ -51,7 +51,7 @@ import { OpcUaServer } from "./opcuaServerLib.js";
 
     //#endregion
 
-    //#region  Type definition
+    //#region Type definitions
 
     //#region PlatformType
     const platformType = namespace.addObjectType({
@@ -126,7 +126,6 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: weightPlatformsType,
         modellingRule: "Mandatory"
     })
-
     //#endregion
 
     //#region Density PlatformsType
@@ -154,7 +153,6 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: densityPlatformsType,
         modellingRule: "Mandatory"
     })
-
     //#endregion
 
     //#region ShreaderType
@@ -232,7 +230,6 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.Int16,
         modellingRule: "Mandatory",
-        value: {dataType: DataType.Int16, value: 15}
     })
 
     namespace.addVariable({
@@ -240,7 +237,13 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.String,
         modellingRule: "Mandatory",
-        value: {dataType: DataType.String, value: statuses[2]}
+    })
+
+    namespace.addVariable({
+        browseName: "Functionality",
+        componentOf: plcType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
     })
 
     namespace.addVariable({
@@ -248,7 +251,6 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.Double,
         modellingRule: "Mandatory",
-        value: {dataType: DataType.Double, value: 15.4}
     })
     //#endregion
 
@@ -378,16 +380,66 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     })
     //#endregion
 
+    //#endregion
+
+    //#region Instances
+
+    //#region Plcs
     const clensePlc = plcType.instantiate({
-        browseName: "ZClensePlc",
+        browseName: "ClensePlc",
         organizedBy: addressSpace.rootFolder.objects,
-        })
+        optionals: ["DensityPlatforms", "WastePlatform"]
+    })
 
-    const clensePlc2 = plcType.instantiate({
-        browseName: "AClensePlc2",
+    const densityPlc = plcType.instantiate({
+        browseName: "DensityPlc",
         organizedBy: addressSpace.rootFolder.objects,
-        })
+        optionals: ["DensityPlatforms"]
+    })
 
+    const monitorShreaderPlc = plcType.instantiate({
+        browseName: "MonitorShreaderPlc",
+        organizedBy: addressSpace.rootFolder.objects,
+        optionals: ["Shreader"]
+    })
+
+    const weightPlc = plcType.instantiate({
+        browseName: "WeightPLc",
+        organizedBy: addressSpace.rootFolder.objects,
+        optionals: ["WeightPlatforms"]
+    })
+    //#endregion
+
+    //#region Storage
+    const weeeContainer = weeeStoreType.instantiate({
+        browseName: "WEEEContainer",
+        organizedBy: addressSpace.rootFolder.objects,
+    })
+
+    const rawMaterialStorage = weeeStoreType.instantiate({
+        browseName: "RawMaterialStorage",
+        organizedBy: addressSpace.rootFolder.objects,
+    })
+
+    const wasteStorage = weeeStoreType.instantiate({
+        browseName: "WasteStorage",
+        organizedBy: addressSpace.rootFolder.objects,
+    })
+    //#endregion
+
+    //#region Pics
+    const weightPic = pic16F877AWeightType.instantiate({
+        browseName: "WeightPic",
+        organizedBy: addressSpace.rootFolder.objects,
+    })
+
+    const magneticPic = pic16F877AMagneticType.instantiate({
+        browseName: "MagneticPic",
+        organizedBy: addressSpace.rootFolder.objects,
+    })
+    //#endregion
+    
+    //#endregion
 
     await server.startServer()
     server.stopServerListener()
