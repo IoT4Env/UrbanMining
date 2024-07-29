@@ -101,57 +101,57 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     })
     //#endregion
 
-    //#region Weight PlatformType
-    const weightPlatformType = namespace.addObjectType({
-        browseName: "WeightPlatformType"
+    //#region Weight PlatformsType
+    const weightPlatformsType = namespace.addObjectType({
+        browseName: "WeightPlatformsType"
     })
 
     namespace.addObject({
         browseName: "WeightH",
         typeDefinition: platformType,
-        componentOf: weightPlatformType,
+        componentOf: weightPlatformsType,
         modellingRule: "Mandatory"
     })
 
     namespace.addObject({
         browseName: "WeightM",
         typeDefinition: platformType,
-        componentOf: weightPlatformType,
+        componentOf: weightPlatformsType,
         modellingRule: "Mandatory"
     })
 
     namespace.addObject({
         browseName: "WeightL",
         typeDefinition: platformType,
-        componentOf: weightPlatformType,
+        componentOf: weightPlatformsType,
         modellingRule: "Mandatory"
     })
 
     //#endregion
 
-    //#region Density PlatformType
-    const densityPlatformType = namespace.addObjectType({
-        browseName: "DensityPlatformType"
+    //#region Density PlatformsType
+    const densityPlatformsType = namespace.addObjectType({
+        browseName: "DensityPlatformsType"
     })
 
     namespace.addObject({
         browseName: "DensityH",
         typeDefinition: platformType,
-        componentOf: densityPlatformType,
+        componentOf: densityPlatformsType,
         modellingRule: "Mandatory"
     })
 
     namespace.addObject({
         browseName: "DensityM",
         typeDefinition: platformType,
-        componentOf: densityPlatformType,
+        componentOf: densityPlatformsType,
         modellingRule: "Mandatory"
     })
 
     namespace.addObject({
         browseName: "DensityL",
         typeDefinition: platformType,
-        componentOf: densityPlatformType,
+        componentOf: densityPlatformsType,
         modellingRule: "Mandatory"
     })
 
@@ -201,6 +201,30 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     //#region PlcType
     const plcType = namespace.addObjectType({
         browseName: "PlcType"
+    })
+
+    namespace.addObject({
+        browseName: "WeightPlatforms",
+        typeDefinition: weightPlatformsType,
+        modellingRule: "Optional",
+    })
+
+    namespace.addObject({
+        browseName: "DensityPlatforms",
+        typeDefinition: densityPlatformsType,
+        modellingRule: "Optional",
+    })
+
+    namespace.addObject({
+        browseName: "Shreader",
+        typeDefinition: shreader,
+        modellingRule: "Optional",
+    })
+
+    namespace.addObject({
+        browseName: "WastePlatform",
+        typeDefinition: platformType,
+        modellingRule: "Optional",
     })
 
     namespace.addVariable({
