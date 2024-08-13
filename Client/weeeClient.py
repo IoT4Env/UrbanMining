@@ -23,9 +23,9 @@ if __name__ == "__main__":
 
         children = root_node.get_children()
 
-        own_instances = client.get_own_instances()
+        instances = client.get_instances()
 
-        client.show_values(own_instances)
+        client.show_server_structure(instances)
 
     except Exception as error:
         print(error)

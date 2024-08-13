@@ -203,24 +203,28 @@ import { OpcUaServer } from "./opcuaServerLib.js";
 
     namespace.addObject({
         browseName: "WeightPlatforms",
+        componentOf: plcType,
         typeDefinition: weightPlatformsType,
         modellingRule: "Optional",
     })
 
     namespace.addObject({
         browseName: "DensityPlatforms",
+        componentOf: plcType,
         typeDefinition: densityPlatformsType,
         modellingRule: "Optional",
     })
 
     namespace.addObject({
         browseName: "Shreader",
+        componentOf: plcType,
         typeDefinition: shreader,
         modellingRule: "Optional",
     })
 
     namespace.addObject({
         browseName: "WastePlatform",
+        componentOf: plcType,
         typeDefinition: platformType,
         modellingRule: "Optional",
     })
