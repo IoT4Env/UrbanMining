@@ -1,10 +1,13 @@
-from  opcuaClientLib import opcuaClient 
+import sys
+sys.path.append("..")
+
+from  opcuaClientLib import opcuaClient
 import socket
+
 
 client = opcuaClient()
 
 hostname = socket.gethostname()
-
 
 #some useful commands:
 #node.get_children() -> return all node ids
