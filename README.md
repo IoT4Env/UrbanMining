@@ -82,9 +82,30 @@ Once OpenPLC is installed, you can use the project I'm working on by following t
 ## PLCs variables structure
 
 Since it is not possible to have multiple plc on the same openplc installation, the .st program uploaded in the runtime is splittend in many programs each containing a specific Plc logic.\
-This approch needs a way to organize all Plc variables to avoid address conflicts.
+The way plc variables are structured is defined as follows:
 
-Structure to be defined...
+### PLC name convention:
+
+- CLENSEPLC => C
+- DENSITYPLC => D
+- SHREDERPLC => S
+- WEIGHTPLC => W
+
+### Other name convention:
+
+- POWERCONSUPTION => PC
+- HIGH => H
+- MEDIUM => M
+- LOW => L
+
+### PLC components
+
+Considering the Clense PLC with ID = 1 as an example, it's components are identified like so:
+
+- WASTE => 10
+- DENSITY_L => 110
+- DENSITY_M => 111
+- DENSITY_H => 112
 
 ## Virtual environment setup (python)
 

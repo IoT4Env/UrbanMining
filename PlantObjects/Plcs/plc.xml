@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-23T22:53:12">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-23T23:35:08">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -22,7 +22,7 @@
             <values>
               <value name="SHUT"/>
               <value name="OPEN"/>
-              <value name="FUNCTIONING"/>
+              <value name="OK"/>
               <value name="DANGER"/>
             </values>
           </enum>
@@ -46,7 +46,7 @@
                 <INT/>
               </type>
             </variable>
-            <variable name="TEST2POWER_CONSUPTION">
+            <variable name="PC">
               <type>
                 <REAL/>
               </type>
@@ -98,9 +98,9 @@
         <baseType>
           <enum>
             <values>
-              <value name="HIGH"/>
-              <value name="MEDIUM"/>
-              <value name="LOW"/>
+              <value name="H"/>
+              <value name="M"/>
+              <value name="L"/>
             </values>
           </enum>
         </baseType>
@@ -123,29 +123,32 @@
       <pou name="clensePlc" pouType="program">
         <interface>
           <localVars>
-            <variable name="CLENSE_ID" address="%QW0">
+            <variable name="C_ID" address="%QW0">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
+            </variable>
+            <variable name="C_PILOT_STATUS" address="%QW1">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="CLENSE_PILOT_STATUS" address="%QW1">
+            <variable name="C_PILOT_FUNC" address="%QW2">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="CLENSE_PILOT_FUNCTIONALITY" address="%QW2">
-              <type>
-                <INT/>
-              </type>
-            </variable>
-            <variable name="CLENSE_POWER_INT" address="%QW3">
+            <variable name="C_PC_INT" address="%QW3">
               <type>
                 <INT/>
               </type>
             </variable>
           </localVars>
           <localVars>
-            <variable name="Clense_STATUS">
+            <variable name="C_STATUS">
               <type>
                 <derived name="STATUSES"/>
               </type>
@@ -153,7 +156,7 @@
                 <simpleValue value="SHUT"/>
               </initialValue>
             </variable>
-            <variable name="Clense_FUNCTIONALITY">
+            <variable name="C_FUNC">
               <type>
                 <derived name="FUNCTIONALITIES"/>
               </type>
@@ -161,7 +164,7 @@
                 <simpleValue value="CONTROLLER"/>
               </initialValue>
             </variable>
-            <variable name="Clense_POWER_REAL">
+            <variable name="C_PC_REAL">
               <type>
                 <REAL/>
               </type>
@@ -169,50 +172,56 @@
                 <simpleValue value="0.0"/>
               </initialValue>
             </variable>
-            <variable name="WASTE">
+            <variable name="WASTE_FB">
               <type>
                 <derived name="PLATFORM_FB"/>
               </type>
             </variable>
-            <variable name="CLENSE_WASTEPLATFORM">
+            <variable name="C_WASTE">
               <type>
                 <derived name="PLATFORM"/>
               </type>
             </variable>
-            <variable name="CLENSE_WASTE_ID">
+            <variable name="C_WASTE_ID">
               <type>
                 <INT/>
               </type>
+              <initialValue>
+                <simpleValue value="10"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[plc id followed by 0 to 9 digit for each component]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="C_WASTE_PC">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
             </variable>
           </localVars>
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[(*An arbitrary value to identify the Clense PLC*)
-CLENSE_ID := 1;
-(*
-Components of the plc begins with the plc id followds by 0 to 9 digit for each component
-E.G.
-component one => 10
-component two => 11
-...
-*)
-CLENSE_WASTE_ID := 10;
+            <xhtml:p><![CDATA[(*Make the changes needed inside the function*)
+WASTE_FB(
+     WASTE_IN := C_WASTE,
+     WASTE_OUT => C_WASTE);
 
-(*Make the changes needed inside the function*)
-WASTE(
-     WASTE_IN := CLENSE_WASTEPLATFORM,
-     WASTE_OUT => CLENSE_WASTEPLATFORM);
+
+(*CHANGE THE FUNCTIONALITY TO OK IN THE DRAWIO DIAGRAM!!!*)
 
 (*Update the variables with the new ones*)
-CLENSE_WASTE_ID := CLENSE_WASTEPLATFORM.ID;
+C_WASTE_PC := C_WASTE.PC;
 
-(*Set CLENSE_STATUS based on remote input*)
-CASE CLENSE_PILOT_STATUS OF
-  0: CLENSE_STATUS := SHUT;
-  1: CLENSE_STATUS := OPEN;
-  2: CLENSE_STATUS := FUNCTIONING;
-  3: CLENSE_STATUS := DANGER;
+(*Set C_STATUS based on remote input*)
+CASE C_PILOT_STATUS OF
+  0: C_STATUS := SHUT;
+  1: C_STATUS := OPEN;
+  2: C_STATUS := OK;
+  3: C_STATUS := DANGER;
 END_CASE;
 
 (*logic for functionality status*)
@@ -221,13 +230,13 @@ END_CASE;
 
 
 
-CASE CLENSE_STATUS OF
+CASE C_STATUS OF
         (*Imagine to read the power consuption of the PLC...*)
-  SHUT: CLENSE_POWER_REAL := 0.0;
+  SHUT: C_PC_REAL := 0.0;
         (*Need to cast the power consuption as an integer for the modbus to read it's value*)
-        CLENSE_POWER_INT := REAL_TO_INT(CLENSE_POWER_REAL * 10.0);
-  OPEN:  CLENSE_POWER_REAL := CLENSE_POWER_REAL + 0.7;
-        
+        C_PC_INT := REAL_TO_INT(C_PC_REAL * 10.0);
+  OPEN:  C_PC_REAL := C_PC_REAL + 0.7;
+    
   
 END_CASE;
 ]]></xhtml:p>
@@ -237,14 +246,14 @@ END_CASE;
       <pou name="densityPlc" pouType="program">
         <interface>
           <localVars>
-            <variable name="Density_RB23" address="%QX0.0">
+            <variable name="D_RB23" address="%QX0.0">
               <type>
                 <BOOL/>
               </type>
             </variable>
           </localVars>
           <localVars>
-            <variable name="Density_WASTE">
+            <variable name="D_WASTE">
               <type>
                 <derived name="PLATFORM"/>
               </type>
@@ -258,7 +267,7 @@ END_CASE;
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[DENSITY_RB23 := TRUE;
+            <xhtml:p><![CDATA[D_RB23 := TRUE;
 
 
 ]]></xhtml:p>
@@ -298,7 +307,7 @@ WASTE_OUT.ID := 1;
   <instances>
     <configurations>
       <configuration name="Config0">
-        <resource name="MAIN_RES">
+        <resource name="main_res">
           <task name="task0" priority="0" interval="T#20ms">
             <pouInstance name="instance0" typeName="clensePlc"/>
           </task>
