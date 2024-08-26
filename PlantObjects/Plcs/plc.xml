@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-26T08:38:29">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-26T08:56:57">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -374,9 +374,6 @@ C_WASTE_FB(
      WASTE_IN := C_WASTE,
      WASTE_OUT => C_WASTE);
 
-
-(*CHANGE THE FUNCTIONALITY TO OK IN THE DRAWIO DIAGRAM!!!*)
-(*ADD WEEE SCRUMBLE NUMBER FOR THE PLC*)
 
 (*Update the variables with the new ones*)
 C_WASTE_PC := C_WASTE.PC;

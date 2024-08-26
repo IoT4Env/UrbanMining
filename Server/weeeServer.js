@@ -229,6 +229,13 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         modellingRule: "Optional",
     })
 
+    namespace.addObject({
+        browseName: "GristPlatform",
+        componentOf: plcType,
+        typeDefinition: platformType,
+        modellingRule: "Optional",
+    })
+
     namespace.addVariable({
         browseName: "Id",
         componentOf: plcType,
@@ -398,7 +405,7 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     const densityPlc = plcType.instantiate({
         browseName: "DensityPlc",
         organizedBy: addressSpace.rootFolder.objects,
-        optionals: ["DensityPlatforms"]
+        optionals: ["DensityPlatforms", "GristPlatform"]
     })
 
     const monitorShreaderPlc = plcType.instantiate({
