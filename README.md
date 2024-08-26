@@ -98,14 +98,9 @@ The way plc variables are structured is defined as follows:
 - MEDIUM => M
 - LOW => L
 
-### PLC components
+## Platforms identification
 
-Considering the Clense PLC with ID = 1 as an example, it's components are identified like so:
-
-- WASTE => 10
-- DENSITY_L => 110
-- DENSITY_M => 111
-- DENSITY_H => 112
+View the WEEE_Schema.png to know the id number of each platform.
 
 ## Virtual environment setup (python)
 

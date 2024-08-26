@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-23T23:35:08">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-26T08:38:29">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -66,7 +66,7 @@
                 <derived name="DIRECTIONS"/>
               </type>
             </variable>
-            <variable name="WORKING_MATERIAL">
+            <variable name="MATERIAL">
               <type>
                 <derived name="MATERIALS"/>
               </type>
@@ -78,7 +78,7 @@
         <baseType>
           <enum>
             <values>
-              <value name="AUTOMATICO"/>
+              <value name="AUTO"/>
               <value name="MANUAL"/>
             </values>
           </enum>
@@ -172,7 +172,7 @@
                 <simpleValue value="0.0"/>
               </initialValue>
             </variable>
-            <variable name="WASTE_FB">
+            <variable name="C_WASTE_FB">
               <type>
                 <derived name="PLATFORM_FB"/>
               </type>
@@ -187,11 +187,8 @@
                 <INT/>
               </type>
               <initialValue>
-                <simpleValue value="10"/>
+                <simpleValue value="8"/>
               </initialValue>
-              <documentation>
-                <xhtml:p><![CDATA[plc id followed by 0 to 9 digit for each component]]></xhtml:p>
-              </documentation>
             </variable>
             <variable name="C_WASTE_PC">
               <type>
@@ -201,17 +198,185 @@
                 <simpleValue value="0.0"/>
               </initialValue>
             </variable>
+            <variable name="C_WASTE_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="C_WASTE_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="C_WASTE_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="C_WASTE_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
           </localVars>
+          <externalVars>
+            <variable name="DENSITIES">
+              <type>
+                <array>
+                  <dimension lower="0" upper="2"/>
+                  <baseType>
+                    <derived name="PLATFORM"/>
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+          </externalVars>
+          <localVars>
+            <variable name="C_DENS_H_FB">
+              <type>
+                <derived name="PLATFORM_FB"/>
+              </type>
+            </variable>
+          </localVars>
+          <externalVars>
+            <variable name="DENS_H">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_H_ID">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="DENS_H_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </externalVars>
+          <localVars>
+            <variable name="C_DENS_M_FB">
+              <type>
+                <derived name="PLATFORM_FB"/>
+              </type>
+            </variable>
+          </localVars>
+          <externalVars>
+            <variable name="DENS_M">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_M_ID">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="DENS_M_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </externalVars>
+          <localVars>
+            <variable name="C_DENS_L_FB">
+              <type>
+                <derived name="PLATFORM_FB"/>
+              </type>
+            </variable>
+          </localVars>
+          <externalVars>
+            <variable name="DENS_L">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_L_ID">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="DENS_L_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </externalVars>
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[(*Make the changes needed inside the function*)
-WASTE_FB(
+            <xhtml:p><![CDATA[(*Define logic to assign enum value when receiving a command through modbus*)
+
+
+(*Make the changes needed inside the function*)
+C_WASTE_FB(
      WASTE_IN := C_WASTE,
      WASTE_OUT => C_WASTE);
 
 
 (*CHANGE THE FUNCTIONALITY TO OK IN THE DRAWIO DIAGRAM!!!*)
+(*ADD WEEE SCRUMBLE NUMBER FOR THE PLC*)
 
 (*Update the variables with the new ones*)
 C_WASTE_PC := C_WASTE.PC;
@@ -246,29 +411,240 @@ END_CASE;
       <pou name="densityPlc" pouType="program">
         <interface>
           <localVars>
-            <variable name="D_RB23" address="%QX0.0">
+            <variable name="D_ID" address="%QW4">
               <type>
-                <BOOL/>
+                <INT/>
               </type>
+              <initialValue>
+                <simpleValue value="2"/>
+              </initialValue>
             </variable>
           </localVars>
           <localVars>
-            <variable name="D_WASTE">
+            <variable name="D_PC">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
+            </variable>
+            <variable name="D_STATUS">
+              <type>
+                <derived name="STATUSES"/>
+              </type>
+              <initialValue>
+                <simpleValue value="SHUT"/>
+              </initialValue>
+            </variable>
+            <variable name="D_PILOT_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="D_FUNC">
+              <type>
+                <derived name="FUNCTIONALITIES"/>
+              </type>
+              <initialValue>
+                <simpleValue value="SEPARATOR"/>
+              </initialValue>
+            </variable>
+            <variable name="D_RAW_MATERIAL_FB">
+              <type>
+                <derived name="PLATFORM_FB"/>
+              </type>
+            </variable>
+            <variable name="D_GRIST">
               <type>
                 <derived name="PLATFORM"/>
               </type>
             </variable>
-            <variable name="WASTE">
+            <variable name="D_GRIST_ID">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="20"/>
+              </initialValue>
+            </variable>
+            <variable name="D_GRIST_PC">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
+            </variable>
+            <variable name="D_GRIST_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="D_GRIST_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="D_GRIST_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="D_GRIST_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </localVars>
+          <externalVars>
+            <variable name="DENSITIES">
+              <type>
+                <array>
+                  <dimension lower="0" upper="2"/>
+                  <baseType>
+                    <derived name="PLATFORM"/>
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+          </externalVars>
+          <localVars>
+            <variable name="D_DENS_H_FB">
               <type>
                 <derived name="PLATFORM_FB"/>
               </type>
             </variable>
           </localVars>
+          <externalVars>
+            <variable name="DENS_H">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_H_ID">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="DENS_H_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </externalVars>
+          <localVars>
+            <variable name="D_DENS_M_FB">
+              <type>
+                <derived name="PLATFORM_FB"/>
+              </type>
+            </variable>
+          </localVars>
+          <externalVars>
+            <variable name="DENS_M">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_M_ID">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="DENS_M_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </externalVars>
+          <localVars>
+            <variable name="D_DENS_L_FB">
+              <type>
+                <derived name="PLATFORM_FB"/>
+              </type>
+            </variable>
+          </localVars>
+          <externalVars>
+            <variable name="DENS_L">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_L_ID">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="DENS_L_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </externalVars>
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[D_RB23 := TRUE;
-
+            <xhtml:p><![CDATA[D_ID := 2;
 
 ]]></xhtml:p>
           </ST>
@@ -294,10 +670,13 @@ END_CASE;
         <body>
           <ST>
             <xhtml:p><![CDATA[(*The exact same logic applies for all platforms*)
-
+WASTE_OUT.SETTING := MANUAL;
+WASTE_OUT.STATUS := SHUT;
+WASTE_OUT.DIRECTION := FORWARD;
+(*Material cannot be set, just read*)
 
 (*Update the platform with new values*)
-WASTE_OUT.ID := 1;
+
 ]]></xhtml:p>
           </ST>
         </body>
@@ -311,6 +690,141 @@ WASTE_OUT.ID := 1;
           <task name="task0" priority="0" interval="T#20ms">
             <pouInstance name="instance0" typeName="clensePlc"/>
           </task>
+          <globalVars>
+            <variable name="DENSITIES">
+              <type>
+                <array>
+                  <dimension lower="0" upper="2"/>
+                  <baseType>
+                    <derived name="PLATFORM"/>
+                  </baseType>
+                </array>
+              </type>
+            </variable>
+            <variable name="DENS_H">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_H_ID">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="7"/>
+              </initialValue>
+            </variable>
+            <variable name="DENS_H_PC">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
+            </variable>
+            <variable name="DENS_H_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_H_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_M_ID">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="6"/>
+              </initialValue>
+            </variable>
+            <variable name="DENS_M_PC">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
+            </variable>
+            <variable name="DENS_M_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_M_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L">
+              <type>
+                <derived name="PLATFORM"/>
+              </type>
+            </variable>
+            <variable name="DENS_L_ID">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="5"/>
+              </initialValue>
+            </variable>
+            <variable name="DENS_L_PC">
+              <type>
+                <REAL/>
+              </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
+            </variable>
+            <variable name="DENS_L_SETTING">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_STATUS">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_DIRECTION">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="DENS_L_MATERIAL">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+          </globalVars>
         </resource>
       </configuration>
     </configurations>
