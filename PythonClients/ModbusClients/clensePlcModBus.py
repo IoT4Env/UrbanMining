@@ -10,7 +10,7 @@ if __name__ == '__main__':
     clensePlc_client.connect()
     print(f'connected to {clensePlc_client}')
 
-    read2 = clensePlc_client.read_holding_registers(10, 3)
+    read2 = clensePlc_client.read_holding_registers(1, 3)#starting at 0, read x registers
     print(read2.registers)
 
     clensePlc_client.close()

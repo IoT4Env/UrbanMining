@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-08-26T12:03:43">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-02T18:29:34">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -21,7 +21,7 @@
           <enum>
             <values>
               <value name="SHUT"/>
-              <value name="OPEN"/>
+              <value name="START"/>
               <value name="OK"/>
               <value name="DANGER"/>
             </values>
@@ -154,7 +154,7 @@
       <pou name="ClensePlc" pouType="program">
         <interface>
           <localVars>
-            <variable name="C_ID" address="%QW0">
+            <variable name="C_ID">
               <type>
                 <INT/>
               </type>
@@ -162,23 +162,21 @@
                 <simpleValue value="4"/>
               </initialValue>
             </variable>
-            <variable name="C_PILOT_STATUS" address="%QW1">
+            <variable name="C_PILOT_STATUS">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="C_PILOT_FUNC" address="%QW2">
+            <variable name="C_PILOT_FUNC">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="C_PC_INT" address="%QW3">
+            <variable name="C_PC_INT">
               <type>
                 <INT/>
               </type>
             </variable>
-          </localVars>
-          <localVars>
             <variable name="C_STATUS">
               <type>
                 <derived name="STATUSES"/>
@@ -412,9 +410,7 @@ C_WASTE_PC := C_WASTE.PC;
 (*Set C_STATUS based on remote input*)
 CASE C_PILOT_STATUS OF
   0: C_STATUS := SHUT;
-  1: C_STATUS := OPEN;
-  2: C_STATUS := OK;
-  3: C_STATUS := DANGER;
+  1: C_STATUS := START;
 END_CASE;
 
 (*logic for functionality status*)
@@ -428,9 +424,7 @@ CASE C_STATUS OF
   SHUT: C_PC_REAL := 0.0;
         (*Need to cast the power consuption as an integer for the modbus to read it's value*)
         C_PC_INT := REAL_TO_INT(C_PC_REAL * 10.0);
-  OPEN:  C_PC_REAL := C_PC_REAL + 0.7;
-    
-  
+  START: C_PC_REAL := C_PC_REAL + 0.7;
 END_CASE;
 ]]></xhtml:p>
           </ST>
@@ -439,7 +433,7 @@ END_CASE;
       <pou name="DensityPlc" pouType="program">
         <interface>
           <localVars>
-            <variable name="D_ID" address="%QW4">
+            <variable name="D_ID" address="%QW3">
               <type>
                 <INT/>
               </type>
@@ -698,13 +692,20 @@ END_CASE;
         <body>
           <ST>
             <xhtml:p><![CDATA[(*The exact same logic applies for all platforms*)
-OUT.SETTING := MANUAL;
-OUT.STATUS := SHUT;
-OUT.DIRECTION := FORWARD;
-(*Material cannot be set, just read*)
 
-(*Update the platform with new values*)
+(*EVALUATE DATA FROM THE PLATFORM*)
+(*FOR EXAMPLE, THE POWER CONSUPTION (PC)*)
+CASE IN.STATUS OF
+  SHUT: OUT.PC := 0.0;
+  START: OUT.PC := 3.5;
+END_CASE;
 
+(*SET STATUS TO DANGER IF SOMETHING IS NOT NORMAL*)
+IF IN.PC >= 10.0 THEN
+  OUT.STATUS := DANGER;
+ELSE
+  OUT.STATUS := OK;
+END_IF;
 ]]></xhtml:p>
           </ST>
         </body>
@@ -830,7 +831,7 @@ OUT.DIRECTION := FORWARD;
       <pou name="WeightPlc" pouType="program">
         <interface>
           <localVars>
-            <variable name="W_ID">
+            <variable name="W_ID" address="%QW1">
               <type>
                 <INT/>
               </type>
@@ -838,6 +839,8 @@ OUT.DIRECTION := FORWARD;
                 <simpleValue value="1"/>
               </initialValue>
             </variable>
+          </localVars>
+          <localVars>
             <variable name="W_PC">
               <type>
                 <REAL/>
@@ -846,6 +849,18 @@ OUT.DIRECTION := FORWARD;
                 <simpleValue value="0.0"/>
               </initialValue>
             </variable>
+          </localVars>
+          <localVars>
+            <variable name="W_PC_INT" address="%QW101">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="35"/>
+              </initialValue>
+            </variable>
+          </localVars>
+          <localVars>
             <variable name="W_STATUS">
               <type>
                 <derived name="STATUSES"/>
@@ -854,12 +869,28 @@ OUT.DIRECTION := FORWARD;
                 <simpleValue value="SHUT"/>
               </initialValue>
             </variable>
+            <variable name="W_PILOT_STATUS">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+            </variable>
             <variable name="W_FUNC">
               <type>
                 <derived name="FUNCTIONALITIES"/>
               </type>
               <initialValue>
                 <simpleValue value="SEPARATOR"/>
+              </initialValue>
+            </variable>
+            <variable name="W_PILOT_FUNC">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="1"/>
               </initialValue>
             </variable>
             <variable name="W_WEIGHTS">
@@ -892,8 +923,11 @@ OUT.DIRECTION := FORWARD;
             </variable>
             <variable name="WEIGHT_H_PC">
               <type>
-                <REAL/>
+                <INT/>
               </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
             </variable>
             <variable name="WEIGHT_H_SETTING">
               <type>
@@ -904,6 +938,9 @@ OUT.DIRECTION := FORWARD;
               <type>
                 <INT/>
               </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
             </variable>
             <variable name="WEIGHT_H_DIRECTION">
               <type>
@@ -937,6 +974,9 @@ OUT.DIRECTION := FORWARD;
               <type>
                 <REAL/>
               </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
             </variable>
             <variable name="WEIGHT_M_SETTING">
               <type>
@@ -980,6 +1020,9 @@ OUT.DIRECTION := FORWARD;
               <type>
                 <REAL/>
               </type>
+              <initialValue>
+                <simpleValue value="0.0"/>
+              </initialValue>
             </variable>
             <variable name="WEIGHT_L_SETTING">
               <type>
@@ -1005,7 +1048,72 @@ OUT.DIRECTION := FORWARD;
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[W_ID := 1;
+            <xhtml:p><![CDATA[(*based on remote input, the platform object changes it's parameters accordingly*)
+W_ID := 1;
+
+(*PLC REMOTE CONFIGURATION*)
+CASE W_PILOT_STATUS OF
+  0: W_STATUS := SHUT;
+  1: W_STATUS := START;
+END_CASE;
+
+CASE W_PILOT_FUNC OF
+  0: W_FUNC := CONTROLLER;
+  1: W_FUNC := SEPARATOR;
+END_CASE;
+
+(*PLC VARIABLES SET*)
+CASE W_STATUS OF
+  SHUT: W_PC := 0.0;
+  START: W_PC := 1.5;
+END_CASE;
+
+(*INTEGER PC CONVERSION FOR MODBUS TO READ THE VALUE*)
+(*W_PC_INT := REAL_TO_INT(W_PC * 10.0);*)
+
+(*CHECK PLC STATUS BASED ON PC*)
+IF W_PC >= 8.0 THEN (*MAYBE USE A GLOBAL VARIABLE FOR THE PC LIMIT...*)
+  W_STATUS := DANGER;
+ELSE
+  W_STATUS := OK;
+END_IF;
+
+(*WEIGHT HIGH PLATFORM CONFIGURATION*)
+CASE WEIGHT_H_SETTING OF
+  0: WEIGHT_H.SETTING := MANUAL;
+  1: WEIGHT_H.SETTING := AUTO;
+END_CASE;
+
+CASE WEIGHT_H_STATUS OF
+  0: WEIGHT_H.STATUS := SHUT;
+  1: WEIGHT_H.STATUS := START;
+END_CASE;
+
+(*OTHER CONFIGURATIONS IN THE FUTURE*)
+(*...*)
+
+
+(*CALL WEIGHT PLATFORM FUNCTION*)
+
+W_WEIGHT_H_FB(
+        IN := WEIGHT_H,
+        OUT => WEIGHT_H);
+
+(*UPDATE PC*)
+WEIGHT_H_PC := REAL_TO_INT(WEIGHT_H.PC * 10.0);
+
+(*UPDATE STATUS*)
+CASE WEIGHT_H.STATUS OF
+  OK: WEIGHT_H_STATUS := 2;
+  DANGER: WEIGHT_H_STATUS := 3;
+END_CASE;
+
+
+
+
+
+
+
 ]]></xhtml:p>
           </ST>
         </body>
@@ -1015,9 +1123,9 @@ OUT.DIRECTION := FORWARD;
   <instances>
     <configurations>
       <configuration name="Config0">
-        <resource name="main_res">
+        <resource name="Res0">
           <task name="task0" priority="0" interval="T#20ms">
-            <pouInstance name="instance0" typeName="ClensePlc"/>
+            <pouInstance name="instance0" typeName="WeightPlc"/>
           </task>
           <globalVars>
             <variable name="DENSITIES">
