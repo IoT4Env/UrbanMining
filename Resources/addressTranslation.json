@@ -1,0 +1,33 @@
+{
+    "WEIGHT_PLC": {
+        "ID": 1,
+        "SHUTTED": 1.0,
+        "PC_INT": 100,
+        "PILOT_STATUS": 110,
+        "PILOT_FUNC": 111,
+        "WEIGHT_H":{
+            "ID": 101,
+            "PC_INT": 102,
+            "SETTING": 112,
+            "STATUS": 113,
+            "DIRECTION": 114,
+            "MATERIAL": 115
+        },
+        "WEIGHT_M":{
+            "ID": 103,
+            "PC_INT": 104,
+            "SETTING": 116,
+            "STATUS": 117,
+            "DIRECTION": 118,
+            "MATERIAL": 119
+        },
+        "WEIGHT_L":{
+            "ID": 105,
+            "PC_INT": 106,
+            "SETTING": 130,
+            "STATUS": 131,
+            "DIRECTION": 132,
+            "MATERIAL": 133
+        }
+    }
+}
