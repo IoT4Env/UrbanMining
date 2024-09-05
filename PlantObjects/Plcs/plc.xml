@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-04T21:38:09">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-05T21:02:49">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -398,11 +398,11 @@
             <xhtml:p><![CDATA[(*Define logic to assign enum value when receiving a command through modbus*)
 
 
-(*Make the changes needed inside the function*)
+(*Make the changes needed inside the function
 C_WASTE_FB(
      IN := C_WASTE,
      OUT => C_WASTE);
-
+*)
 
 (*Update the variables with the new ones*)
 C_WASTE_PC := C_WASTE.PC;
@@ -675,14 +675,29 @@ END_CASE;
       <pou name="PLATFORM_FB" pouType="functionBlock">
         <interface>
           <inputVars>
-            <variable name="IN">
+            <variable name="SETTING_IN">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="STATUS_IN">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="PLATFORM_IN">
               <type>
                 <derived name="PLATFORM"/>
               </type>
             </variable>
           </inputVars>
           <outputVars>
-            <variable name="OUT">
+            <variable name="STATUS_OUT">
+              <type>
+                <INT/>
+              </type>
+            </variable>
+            <variable name="PLATFORM_OUT">
               <type>
                 <derived name="PLATFORM"/>
               </type>
@@ -691,21 +706,38 @@ END_CASE;
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[(*The exact same logic applies for all platforms*)
+            <xhtml:p><![CDATA[(*PLATFORM REMOTE CONFIGURATION*)
+CASE SETTING_IN OF
+  0: PLATFORM_IN.SETTING := MANUAL;
+  1: PLATFORM_IN.SETTING := AUTO;
+END_CASE;
 
-(*EVALUATE DATA FROM THE PLATFORM*)
-(*FOR EXAMPLE, THE POWER CONSUPTION (PC)*)
-CASE IN.STATUS OF
-  SHUT: OUT.PC := 0.0;
-  START: OUT.PC := 3.5;
+CASE STATUS_IN OF
+  0: PLATFORM_IN.STATUS := SHUT;
+  1: PLATFORM_IN.STATUS := START;
+END_CASE;
+
+(*SET PC BASED ON STATUS*)
+CASE PLATFORM_IN.STATUS OF
+  SHUT: PLATFORM_OUT.PC := 0.0;
+  START: PLATFORM_OUT.PC := 3.5;
 END_CASE;
 
 (*SET STATUS TO DANGER IF SOMETHING IS NOT NORMAL*)
-IF IN.PC >= 10.0 THEN
-  OUT.STATUS := DANGER;
+IF PLATFORM_IN.PC >= 10.0 THEN
+  PLATFORM_OUT.STATUS := DANGER;
 ELSE
-  OUT.STATUS := OK;
+  PLATFORM_OUT.STATUS := OK;
 END_IF;
+
+(*UPDATE STATUS FOR MODBUS*)
+CASE PLATFORM_OUT.STATUS OF
+  OK: STATUS_OUT := 2;
+  DANGER: STATUS_OUT := 3;
+END_CASE;
+
+
+
 ]]></xhtml:p>
           </ST>
         </body>
@@ -839,6 +871,11 @@ END_IF;
                 <simpleValue value="1"/>
               </initialValue>
             </variable>
+            <variable name="W_SHUTTED" address="%QX1.0">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
           </localVars>
           <localVars>
             <variable name="W_PC">
@@ -901,17 +938,7 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="W_WEIGHTS">
-              <type>
-                <array>
-                  <dimension lower="0" upper="2"/>
-                  <baseType>
-                    <derived name="PLATFORM"/>
-                  </baseType>
-                </array>
-              </type>
-            </variable>
-            <variable name="W_WEIGHT_H_FB">
+            <variable name="WEIGHT_FB">
               <type>
                 <derived name="PLATFORM_FB"/>
               </type>
@@ -964,11 +991,6 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="W_WEIGHT_M_FB">
-              <type>
-                <derived name="PLATFORM_FB"/>
-              </type>
-            </variable>
             <variable name="WEIGHT_M">
               <type>
                 <derived name="PLATFORM"/>
@@ -1014,11 +1036,6 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="W_WEIGHT_L_FB">
-              <type>
-                <derived name="PLATFORM_FB"/>
-              </type>
-            </variable>
             <variable name="WEIGHT_L">
               <type>
                 <derived name="PLATFORM"/>
@@ -1066,7 +1083,14 @@ END_IF;
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[(*WEIGHT PLC REMOTE CONFIGURATION*)
+            <xhtml:p><![CDATA[(*COMPUTE PC FOR THIS PLC*)
+(*NO NEED TO REMEMBER TO CONVERT REAL TO INT*)
+W_PC_INT := REAL_TO_INT(W_PC * 10.0);
+WEIGHT_H_PC_INT := REAL_TO_INT(WEIGHT_H.PC * 10.0);
+WEIGHT_M_PC_INT := REAL_TO_INT(WEIGHT_M.PC * 10.0);
+WEIGHT_L_PC_INT := REAL_TO_INT(WEIGHT_L.PC * 10.0);
+
+(*WEIGHT PLC REMOTE CONFIGURATION*)
 CASE W_PILOT_STATUS OF
   0: W_STATUS := SHUT;
   1: W_STATUS := START;
@@ -1079,12 +1103,15 @@ END_CASE;
 
 (*PLC VARIABLES SET*)
 CASE W_STATUS OF
-  SHUT: W_PC := 0.0;
-        W_PC_INT := REAL_TO_INT(W_PC * 10.0);
+  SHUT: W_SHUTTED := ShutPlcComponents(
+         PLC_PC => W_PC,
+         PLATFORM1_PC => WEIGHT_H.PC,
+         PLATFORM2_PC => WEIGHT_M.PC,
+         PLATFORM3_PC => WEIGHT_L.PC);
         RETURN;(*CLOSE EVERYTHING ATTACHED TO THIS PLC IF W_STATUS = SHUT*)
   START: W_PC := 1.5;
-         W_PC_INT := REAL_TO_INT(W_PC * 10.0);
 END_CASE;
+W_SHUTTED := FALSE;
 
 (*CHECK PLC STATUS BASED ON PC*)
 IF W_PC >= 8.0 THEN (*MAYBE USE A GLOBAL VARIABLE FOR THE PC LIMIT...*)
@@ -1093,34 +1120,34 @@ ELSE
   W_STATUS := OK;
 END_IF;
 
-(*WEIGHT HIGH PLATFORM CONFIGURATION*)
-CASE WEIGHT_H_SETTING OF
-  0: WEIGHT_H.SETTING := MANUAL;
-  1: WEIGHT_H.SETTING := AUTO;
-END_CASE;
+(*CONTROL PLATFORMS ATTACHED TO THIS PLC*)
+WEIGHT_FB(
+     SETTING_IN := WEIGHT_H_SETTING,
+     STATUS_IN := WEIGHT_H_STATUS,
+     PLATFORM_IN := WEIGHT_H,
+     STATUS_OUT => WEIGHT_H_STATUS,
+     PLATFORM_OUT => WEIGHT_H);
 
-CASE WEIGHT_H_STATUS OF
-  0: WEIGHT_H.STATUS := SHUT;
-  1: WEIGHT_H.STATUS := START;
-END_CASE;
+WEIGHT_FB(
+     SETTING_IN := WEIGHT_M_SETTING,
+     STATUS_IN := WEIGHT_M_STATUS,
+     PLATFORM_IN := WEIGHT_M,
+     STATUS_OUT => WEIGHT_M_STATUS,
+     PLATFORM_OUT => WEIGHT_M);
 
-(*OTHER CONFIGURATIONS IN THE FUTURE*)
-(*...*)
+WEIGHT_FB(
+     SETTING_IN := WEIGHT_L_SETTING,
+     STATUS_IN := WEIGHT_L_STATUS,
+     PLATFORM_IN := WEIGHT_L,
+     STATUS_OUT => WEIGHT_L_STATUS,
+     PLATFORM_OUT => WEIGHT_L);
 
 
-(*CALL WEIGHT PLATFORM FUNCTION*)
-W_WEIGHT_H_FB(
-        IN := WEIGHT_H,
-        OUT => WEIGHT_H);
 
-(*UPDATE PC*)
-WEIGHT_H_PC_INT := REAL_TO_INT(WEIGHT_H.PC * 10.0);
 
-(*UPDATE STATUS*)
-CASE WEIGHT_H.STATUS OF
-  OK: WEIGHT_H_STATUS := 2;
-  DANGER: WEIGHT_H_STATUS := 3;
-END_CASE;
+
+
+
 
 
 
@@ -1129,6 +1156,45 @@ END_CASE;
 
 
 ]]></xhtml:p>
+          </ST>
+        </body>
+      </pou>
+      <pou name="ShutPlcComponents" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <outputVars>
+            <variable name="PLC_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="PLATFORM1_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="PLATFORM2_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="PLATFORM3_PC">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+          </outputVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[PLC_PC := 0.0;
+PLATFORM1_PC := 0.0;
+PLATFORM2_PC := 0.0;
+PLATFORM3_PC := 0.0;
+
+SHUTPLCCOMPONENTS := TRUE;]]></xhtml:p>
           </ST>
         </body>
       </pou>
