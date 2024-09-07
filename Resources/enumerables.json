@@ -1,0 +1,32 @@
+{
+    "STATUSES": {
+        "SHUT": 0,
+        "START": 1,
+        "OK": 2,
+        "DANGER": 3
+    },
+    "FUNCTIONALITIES": {
+        "CONTROLLER": 0,
+        "SEPARATOR": 1
+    },
+    "SETTINGS": {
+        "AUTO": 0,
+        "MANUAL": 1
+    },
+    "DIRECTIONS": {
+        "FORWARD": 0,
+        "BACKWARDS": 1
+    },
+    "WEIGHTS": {
+        "L": 0,
+        "M": 2,
+        "H": 3
+    },
+    "MATERIALS": {
+        "STEEL": 0,
+        "COPPER": 1,
+        "GOLD": 2,
+        "CLAY": 3,
+        "STONE": 4
+    }
+}
