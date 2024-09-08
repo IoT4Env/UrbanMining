@@ -148,27 +148,20 @@ Whith this knowledge, we can conclude that this is the fifteenth read and write 
 
 Consult the WEEE_Schema.png to view the id number of each platform.
 
-## Virtual environment setup (python)
+## Virtual environments setup (python)
 
-Clients used in this project is written in python, which needs the opcua library to function properly.\
-All the package specifications can be found in the ```requirements.txt``` file.\
-Before installing the packages, the creation of a virtual environment is recommended.\
-You can create the virtual environment inside the "PythonClients" folder by running the following command:\
+Two python virtual environments, each of them in a dedicated folder, are recommended before using the project:
 
-```python3 -m venv venv```
+1. PythonClients folder:
+    - Create virtual environment: ```python3 -m venv venv_clients```
+    - Activate the virtual environment: ```source venv_clients/bin/activate```
+    - Install requirements: ```pip install -r requirementsClient.txt```
+    - Deactivate venv when finished: ```deactivate```
 
-This will create a virtual environment named "venv" with the "venv" module.\
-Next, run the following command to activate the virtual environment:\
+2. PlantObjects/SCADA folder:
+    - Create virtual environment: ```python3 -m venv venv_scada```
+    - Activate the virtual environment: ```source venv_scada/bin/activate```
+    - Install requirements: ```pip install -r requirementsSCADA.txt```
+    - Deactivate venv when finished: ```deactivate```
 
-```source venv/bin/activate```
-
-The name "venv" should be visible in the terminal inside braces like this: (venv).
-
-With this setup, run ```pip install -r requirements.txt``` and all the packages I am currently using will be installed in your virtual environmanet.
-
-To deactivate the virtual environment, simply type ```deactivate``` in the terminal.
-
-To completly remove the virtual enviroment, just delete the "venv" folder.
-
-When the virtual environment setup is ready, python clients can be started on the terminal by typing:
-```python <filename>.py```
+Now you can execute python scripts: ```python <filename>.py```
