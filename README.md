@@ -60,6 +60,18 @@ Note that the mentioned Factory is an abstraction of what a real WEEE Factory co
 Whith the OPC UA Diagram as a template, it is possible to create an OPC UA server from scratch using Programming Languages like Javascript, C#, and Python.
 This project uses the Javascript language for pure semplicity implemention purpouse, but any other languages mentional before is fine to obtain the same result.
 
+## Virtual environments setup (python)
+
+To avoid python packages conflicts, it is recommended to install this project requirements in a virtual environment (venv) inside the UrbanMining folder.\
+A step-by-step guide for setting up such environment is provided below:
+
+- Create virtual environment: ```python3 -m venv venv```
+- Activate the virtual environment: ```source venv/bin/activate```
+- Install requirements: ```pip install -r requirements.txt```
+- Deactivate venv when finished: ```deactivate```
+
+Now you can execute python scripts: ```python <filename>.py```
+
 ## OPENPLC installation
 
 OpenPLC download tutorials:
@@ -147,21 +159,3 @@ Whith this knowledge, we can conclude that this is the fifteenth read and write 
 ## Platforms identification
 
 Consult the WEEE_Schema.png to view the id number of each platform.
-
-## Virtual environments setup (python)
-
-Two python virtual environments, each of them in a dedicated folder, are recommended before using the project:
-
-1. PythonClients folder:
-    - Create virtual environment: ```python3 -m venv venv_clients```
-    - Activate the virtual environment: ```source venv_clients/bin/activate```
-    - Install requirements: ```pip install -r requirementsClient.txt```
-    - Deactivate venv when finished: ```deactivate```
-
-2. PlantObjects/SCADA folder:
-    - Create virtual environment: ```python3 -m venv venv_scada```
-    - Activate the virtual environment: ```source venv_scada/bin/activate```
-    - Install requirements: ```pip install -r requirementsSCADA.txt```
-    - Deactivate venv when finished: ```deactivate```
-
-Now you can execute python scripts: ```python <filename>.py```
