@@ -1,6 +1,17 @@
+#External libraries
 from qtpy.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QComboBox, QGridLayout
-import json
+import json, socket, sys
 
+#go down untile the reach of root project folder
+sys.path.append('../../../')
+
+#Custom libraries
+from Resources import ModbusClient
+
+
+#Add below 2 lines in a separate file for credentials and connections
+slave_address = socket.gethostbyname(socket.gethostname())
+port = 502
 
 def platform_ui():
     #add code to change window with the specified platform data
@@ -9,13 +20,21 @@ def platform_ui():
 def load_json(path: str):
     with open(path) as f:
         return json.load(f)
+    
 
 if __name__ == '__main__':
+    #Weight modbus connection
+    w_plc_mb = ModbusClient(slave_address, port)
+    print(f'Now connected with {w_plc_mb.client}')
+    #Now we can use the modbus functionalities
+
+    #JSON resources
+    weight_plc_map = load_json('../../../Resources/Json/addressTranslation.json')['WEIGHT_PLC']
+    enumerables = load_json('../../../Resources/Json/enumerables.json')
+
     #Below code is the UI for the plc itself
     #Initialize application
     app = QApplication([])
-
-    enumerables = load_json('../../../Resources/enumerables.json')
 
     #Create labels
     w_plc = QLabel('Weight_PLC')
@@ -46,13 +65,13 @@ if __name__ == '__main__':
     platL_button = QPushButton('Platform_L')
 
     #Create HORIZONTAL layouts
-    setting_layout = QHBoxLayout()
-    setting_layout.addWidget(w_setting)
-    setting_layout.addWidget(settings_combo_box)
-
     status_layout = QHBoxLayout()
     status_layout.addWidget(w_status)
     status_layout.addWidget(statuses_combo_box)
+
+    setting_layout = QHBoxLayout()
+    setting_layout.addWidget(w_setting)
+    setting_layout.addWidget(settings_combo_box)
 
     pc_layout = QHBoxLayout()
     pc_layout.addWidget(w_pc)
@@ -64,11 +83,11 @@ if __name__ == '__main__':
     #REMENBER TO ADD VALUE OF POWER CONSUPTION!!!
 
     #Set layouts to widget
-    setting_widget = QWidget()
-    setting_widget.setLayout(setting_layout)
-
     status_widget = QWidget()
     status_widget.setLayout(status_layout)
+
+    setting_widget = QWidget()
+    setting_widget.setLayout(setting_layout)
 
     pc_widget = QWidget()
     pc_widget.setLayout(pc_layout)
@@ -79,8 +98,8 @@ if __name__ == '__main__':
     #Create grid
     w_plc_grid = QGridLayout()
     #widget, row_index, column_index
-    w_plc_grid.addWidget(setting_widget, 0, 0)
-    w_plc_grid.addWidget(status_widget, 1, 0)
+    w_plc_grid.addWidget(status_widget, 0, 0)
+    w_plc_grid.addWidget(setting_widget, 1, 0)
     w_plc_grid.addWidget(pc_widget, 0, 1)
     #more stuff here, hopefully...
 
@@ -99,3 +118,7 @@ if __name__ == '__main__':
 
     # Start 'event loop'
     app.exec_()
+
+    #Close Modbus when execution finishes
+    w_plc_mb.close()
+    print('finished')

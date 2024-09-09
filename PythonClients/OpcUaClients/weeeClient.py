@@ -1,9 +1,11 @@
-import sys
-sys.path.append("..")
+#External libraries
+import socket, sys
 
-from  opcuaClientLib import OpcuaClient
-import socket
+#go down untile the reach of root project folder
+sys.path.append('../../')
 
+#Custom libraries
+from Resources import OpcuaClient
 
 client = OpcuaClient()
 

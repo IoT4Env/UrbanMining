@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-07T22:09:25">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-09T09:08:44">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -916,6 +916,14 @@ END_CASE;
                 <simpleValue value="0"/>
               </initialValue>
             </variable>
+            <variable name="W_CURRENT_STATUS" address="%QW101">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+            </variable>
           </localVars>
           <localVars>
             <variable name="W_FUNC">
@@ -950,7 +958,7 @@ END_CASE;
             </variable>
           </localVars>
           <localVars>
-            <variable name="WEIGHT_H_ID" address="%QW101">
+            <variable name="WEIGHT_H_ID" address="%QW102">
               <type>
                 <INT/>
               </type>
@@ -958,7 +966,7 @@ END_CASE;
                 <simpleValue value="3"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_H_PC_INT" address="%QW102">
+            <variable name="WEIGHT_H_PC_INT" address="%QW103">
               <type>
                 <INT/>
               </type>
@@ -998,7 +1006,7 @@ END_CASE;
             </variable>
           </localVars>
           <localVars>
-            <variable name="WEIGHT_M_ID" address="%QW103">
+            <variable name="WEIGHT_M_ID" address="%QW104">
               <type>
                 <INT/>
               </type>
@@ -1006,7 +1014,7 @@ END_CASE;
                 <simpleValue value="2"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_M_PC_INT" address="%QW104">
+            <variable name="WEIGHT_M_PC_INT" address="%QW105">
               <type>
                 <INT/>
               </type>
@@ -1043,7 +1051,7 @@ END_CASE;
             </variable>
           </localVars>
           <localVars>
-            <variable name="WEIGHT_L_ID" address="%QW105">
+            <variable name="WEIGHT_L_ID" address="%QW106">
               <type>
                 <INT/>
               </type>
@@ -1051,7 +1059,7 @@ END_CASE;
                 <simpleValue value="1"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_L_PC_INT" address="%QW106">
+            <variable name="WEIGHT_L_PC_INT" address="%QW107">
               <type>
                 <INT/>
               </type>
