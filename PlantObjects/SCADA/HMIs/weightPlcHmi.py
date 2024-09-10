@@ -38,12 +38,12 @@ if __name__ == '__main__':
 
     #Create labels
     w_plc = QLabel('Weight_PLC')
-    w_status = QLabel('Status:')
-    w_setting = QLabel('Setting:')
-    w_pc = QLabel('Power consuption:')
+    w_status = QLabel('Status: ')
+    w_setting = QLabel('Setting: ')
+    w_pc_label = QLabel('Power consuption: ')
     #more stuff...
 
-    #Create combo boxes
+    #Create combo boxes for senting commands
     statuses_combo_box = QComboBox()
     statuses = enumerables['STATUSES']
     for key, value in statuses.items():
@@ -55,6 +55,11 @@ if __name__ == '__main__':
     for key, value in settings.items():
         settings_combo_box.addItem(key)
     settings_combo_box.setCurrentIndex(settings['MANUAL'])
+
+    #Create labels for reading data gatherd from PLC
+    w_pc_value = QLabel()
+    w_pc_mb = w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
+    w_pc_value.setText(f'{str(w_pc_mb[0])} W')
 
     #Create buttons
     platH_button = QPushButton('Platform_H')
@@ -74,7 +79,8 @@ if __name__ == '__main__':
     setting_layout.addWidget(settings_combo_box)
 
     pc_layout = QHBoxLayout()
-    pc_layout.addWidget(w_pc)
+    pc_layout.addWidget(w_pc_label)
+    pc_layout.addWidget(w_pc_value)
 
     platforms_layout = QHBoxLayout()
     platforms_layout.addWidget(platH_button)
