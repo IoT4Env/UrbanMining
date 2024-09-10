@@ -12,6 +12,7 @@ class ModbusClient:
 
     def write_register(self, address, value):
         self.client.write_register(address=address, value=value)
+        time.sleep(0.1)
         
     def close(self):
         self.client.close()
