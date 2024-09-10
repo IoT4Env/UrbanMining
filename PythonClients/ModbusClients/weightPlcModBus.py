@@ -1,16 +1,20 @@
 #External libraries
-import socket, json, sys
+import json, sys
 
 #go down untile the reach of root project folder
 sys.path.append('../../')
 
 #Custom libraries
-from Resources import ModbusClient
+from Resources import ModbusClient, ConnConfig, LoadJson
 
 
-#Add below 2 lines in a separate file for credentials and connections
-slave_address = socket.gethostbyname(socket.gethostname())
-port = 502
+#Configure modbus connection 
+modbus_connection = ConnConfig()
+address = modbus_connection.host
+port = modbus_connection.port
+
+#Create LoadJson object
+json_helper = LoadJson()
 
 def load_json(path: str):
     with open(path) as f:
@@ -24,11 +28,11 @@ def write_to_opcua():
 #Code below is used to send data to the OPC UA server
 if __name__ == '__main__':
     #read json for variable address translation and enumerables
-    w_plc_map = load_json('../../Resources/Json/addressTranslation.json')['WEIGHT_PLC']
-    enumerables = load_json('../../Resources/Json/enumerables.json')
+    w_plc_map = json_helper.load('addressTranslation.json')['WEIGHT_PLC']
+    enumerables = json_helper.load('enumerables.json')
 
     #Create weight plc modbus and connect to socket
-    w_plc = ModbusClient(slave_address, port)
+    w_plc = ModbusClient(address, port)
     try:
         print(f'Now connected with {w_plc.client}')
         #Procedures to write data to the opcua server

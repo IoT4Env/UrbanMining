@@ -1,36 +1,36 @@
 #External libraries
 from qtpy.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QComboBox, QGridLayout
-import json, socket, sys
+import sys
 
 #go down untile the reach of root project folder
 sys.path.append('../../../')
 
 #Custom libraries
-from Resources import ModbusClient
+from Resources import ModbusClient, ConnConfig, LoadJson
 
 
-#Add below 2 lines in a separate file for credentials and connections
-slave_address = socket.gethostbyname(socket.gethostname())
-port = 502
+#Configure modbus connection
+modbus_connection = ConnConfig()
+address = modbus_connection.host
+port = modbus_connection.port
+
+#Create LoadJson object
+json_helper = LoadJson()
 
 def platform_ui():
     #add code to change window with the specified platform data
     print('Plc started successfully')
 
-def load_json(path: str):
-    with open(path) as f:
-        return json.load(f)
-    
 
 if __name__ == '__main__':
     #Weight modbus connection
-    w_plc_mb = ModbusClient(slave_address, port)
+    w_plc_mb = ModbusClient(address, port)
     print(f'Now connected with {w_plc_mb.client}')
     #Now we can use the modbus functionalities
 
     #JSON resources
-    weight_plc_map = load_json('../../../Resources/Json/addressTranslation.json')['WEIGHT_PLC']
-    enumerables = load_json('../../../Resources/Json/enumerables.json')
+    weight_plc_map = json_helper.load('addressTranslation.json')['WEIGHT_PLC']
+    enumerables = json_helper.load('enumerables.json')
 
     #Below code is the UI for the plc itself
     #Initialize application
