@@ -4,20 +4,23 @@ Designing a factory to gather rare materials from WEEE using OPC UA tecnology
 
 ## Q & A
 
-If you have any questions about the clarity of this documentation, please submit a Pull Request describing which part(s) need more explaination.
+If you have any questions about the clarity of this documentation, feel free to drop a Pull Request describing which part(s) need more explaination.
 
 ## Technical terminology
 
-- WEEE:\
-    Waste Electrical and Electronic Equipment, as mentioned from the [European Directive numbered 2012/19/EU,](https://en.wikipedia.org/wiki/Waste_Electrical_and_Electronic_Equipment_Directive) consists of all those electrical equipment that are no longer used.
+- WEEE:
+
+    Waste Electrical and Electronic Equipment, as mentioned from the [European Directive numbered 2012/19/EU,](https://en.wikipedia.org/wiki/Waste_Electrical_and_Electronic_Equipment_Directive) consists of all those electrical equipment that are no longer used.\
     Theese WEEE are literal GOLD MINES (which inspieres the name of the project), full of essential build materials for other electronical devices.
 
-- Modbus TCP:\
-    It is a protocol based on the RS485 serial comunication composed of a single transmit line where N clients can transmit data one at a time.
+- Modbus TCP:
+
+    It is a protocol based on the RS485 serial comunication composed of a single transmit line where N clients can transmit data one at a time.\
     More information can be found on this [wikipedia](https://en.wikipedia.org/wiki/Modbus) page.\
     The protocol is used to gather information from Plcs scattered around the factory.
 
-- Modbus and Plc address mapping:\
+- Modbus and Plc address mapping:
+
     When working with modbus and Plc, there is a crucial relationship between the two:
     | Plc Data Type     | Modbus Data Type             |
     |-------------------|------------------            |
@@ -30,34 +33,38 @@ If you have any questions about the clarity of this documentation, please submit
 
 ## Software used in the project
 
-- DRAWIO:\
-    This project provides designs of both the Schema of the Factory and the OPC UA Diagram which are built with the DRAWIO Software.
+- DRAWIO:
+
+    This project provides designs of both the Schema of the Factory and the OPC UA Diagram which are built with the DRAWIO Software.\
     In order to view the above files, DRAWIO have to be used either online or by a local installation of the Software.
 
-- UA Modeller:\
-    The OPC UA Diagram mentioned before is modelled with the UA Modeller Software.
+- UA Modeller:
+
+    The OPC UA Diagram mentioned before is modelled with the UA Modeller Software.\
     Usage of the UA Modeller Software is completly optional since it is a redundancy of the OPC UA Diagram built with DRAWIO.
 
-- OPENPLC:\
-    An external OPEN SOURCE repository named OPENPLC simulates all PLCs used in this project.
-    The folder holding the logic of every plc is the UrbanMining/PlantObjects/Plcs.
-    The OPENPLC is used in this context to emulate a real industrial environment.
+- OPENPLC:
+
+    An external OPEN SOURCE repository named OPENPLC simulates all PLCs used in this project.\
+    The folder holding the logic of every plc is the UrbanMining/PlantObjects/Plcs.\
+    The OPENPLC is used in this context to emulate a real industrial environment.\
     So it can emulate:
+
     - Data collection via modbus TCP
     - Plc program (written in Structured Text, or ST for short)
     - Data exchange between modbus and OPC UA server
     Note that the OPC UA feature is not currently present in OPENPLC, but i have worked around it via external python script that connects to the node JS OPC UA server and populates it with data gathered through modbus TCP.
 
-    The installation specifications can be found in this [section](#openplc-installation).
+    The installation specifications can be found in this [openplc-installation](#openplc-installation) section.
 
 ## UrbanMining specification
 
-This project uses the OPC UA concepts to manage a Factory specialized in the WEEE decomposition with the final goal to gather rare materials, like gold and copper, to be sold to other companies that might need those materials.
+This project uses the OPC UA concepts to manage a Factory specialized in the WEEE decomposition with the final goal to gather rare materials, like gold and copper, to be sold to other companies that might need those materials.\
 Note that the mentioned Factory is an abstraction of what a real WEEE Factory could be.
 
 ## Implementation of OPC UA on the project
 
-Whith the OPC UA Diagram as a template, it is possible to create an OPC UA server from scratch using Programming Languages like Javascript, C#, and Python.
+Whith the OPC UA Diagram as a template, it is possible to create an OPC UA server from scratch using Programming Languages like Javascript, C#, and Python.\
 This project uses the Javascript language for pure semplicity implemention purpouse, but any other languages mentional before is fine to obtain the same result.
 
 ## Virtual environments setup (python)
@@ -92,7 +99,7 @@ Once OpenPLC is installed, you can use the project I'm working on by following t
     Click on the orange arrow to generate program for the OpenPlc runtime and save it where you like with the .st extension.
 
 - Step 4:\
-    Open the openplc runtime and upload the .st file in the Programs section (procedure is better explained on the second link provided upwards).
+    Open the openplc runtime on ```localhost:8080/```, login with username and password "openplc" and upload the .st file in the Programs section (procedure is better explained on the second link provided upwards).
 
 - Step 5:\
     Click the Start PLC button and now a PLC is up and running locally on the PC!
@@ -154,7 +161,7 @@ this is a the ninth read and write variable of the sixth plc.
 
 The third examble, ```%QW234``` is a bit trickier:\
 Since the third digit increments by 1 on each variable, by reaching 9 it rolls back to 0 and increments the previus digit by 2 to maintain parity.\
-Whith this knowledge, we can conclude that this is the fifteenth read and write variable of the second plc.
+with this knowledge, we can conclude that this is the fifteenth read and write variable of the second plc.
 
 ## Platforms identification
 
