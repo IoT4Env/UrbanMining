@@ -7,7 +7,7 @@ from opcua import Client
 #2 => Variables
 #3 => Methods
 
-class OpcuaClient:
+class OpcuaClientLib:
 
     def create_client(self, opc_url:str):
         self.client = Client(opc_url)
