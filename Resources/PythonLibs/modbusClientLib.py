@@ -2,7 +2,7 @@
 from pymodbus.client import ModbusTcpClient
 import time
 
-class ModbusClient:
+class ModbusClientLib:
     def __init__(self, host:str, port:int):
         self.client = ModbusTcpClient(host=host, port=port)
         self.client.connect()
