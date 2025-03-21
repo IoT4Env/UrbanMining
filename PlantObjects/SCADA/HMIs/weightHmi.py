@@ -9,10 +9,11 @@ from Resources import QtpyWidgetsLib, WeightHmiWindowLib
 
 if __name__ == '__main__':
     # Instantiate weight HMI application
-    w_hmi_app = QtpyWidgetsLib([])
+    w_hmi_app = QtpyWidgetsLib(sys.argv)
 
     # Instantiate HMI window
     w_hmi = WeightHmiWindowLib()
     
     # Display HMI
     w_hmi_app.start_event_loop_()
+    print('Weight HMI execution finished')
