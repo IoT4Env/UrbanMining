@@ -16,21 +16,6 @@ class QtpyWidgetsLib(QWidget):
     def __init__(self, argv : list[str] = []):
         #Create new application when instantiating object from this class
         self.qt_app = QApplication(argv)
-        
-
-    #Create function for creating a tab
-    #If the client needs more tabs at once, it should use a for loop
-
-    def create_tab(self, tab_layout, tab_name : str) -> QTabWidget:
-        widget_tab = QTabWidget()
-
-        tab = QWidget()
-
-        tab.setLayout(tab_layout)
-
-        widget_tab.addTab(tab, tab_name)
-
-        return widget_tab
 
     def start_event_loop_(self):
         self.qt_app.exec_()
@@ -38,6 +23,9 @@ class QtpyWidgetsLib(QWidget):
     def create_label(self, label: str) -> QLabel:
         return QLabel(label)
     
+    def create_tab_widget(self) -> QTabWidget:
+        return QTabWidget()
+
     def create_combo_box(self) -> QComboBox:
         return QComboBox()
 
