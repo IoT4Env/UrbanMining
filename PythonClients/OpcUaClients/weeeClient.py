@@ -5,10 +5,10 @@ import sys
 sys.path.append('../../')
 
 #Custom libraries
-from Resources import OpcuaClientLib, ConnConfig
+from Resources import OpcuaClientLib, ConnConfigLib
 
 client = OpcuaClientLib()
-opcua_connection = ConnConfig()
+opcua_connection = ConnConfigLib()
 
 hostname = opcua_connection.host
 

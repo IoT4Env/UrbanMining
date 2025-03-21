@@ -16,9 +16,6 @@ port = modbus_connection.port
 #Create JsonHelperLib object
 json_helper = JsonHelperLib()
 
-def load_json(path: str):
-    with open(path) as f:
-        return json.load(f)
 
 #Probably better to use a separate file just in case...
 def write_to_opcua():
@@ -28,8 +25,8 @@ def write_to_opcua():
 #Code below is used to send data to the OPC UA server
 if __name__ == '__main__':
     #read json for variable address translation and enumerables
-    w_plc_map = json_helper.load('addressTranslation.json')['WEIGHT_PLC']
-    enumerables = json_helper.load('enumerables.json')
+    w_plc_map = json_helper.load_json('addressTranslation.json')['WEIGHT_PLC']
+    enumerables = json_helper.load_json('enumerables.json')
 
     #Create weight plc modbus and connect to socket
     w_plc = ModbusClientLib(address, port)
