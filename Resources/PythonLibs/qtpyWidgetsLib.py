@@ -1,5 +1,5 @@
 #External libraries
-from qtpy.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QComboBox, QGridLayout, QTabWidget, QMainWindow
+from qtpy.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QComboBox, QGridLayout, QTabWidget, QMainWindow, QCheckBox
 from qtpy.QtCore import Qt
 
 
@@ -25,6 +25,9 @@ class QtpyWidgetsLib(QWidget):
     
     def create_tab_widget(self) -> QTabWidget:
         return QTabWidget()
+    
+    def create_check_box(self):
+        return QCheckBox()
 
     def create_combo_box(self) -> QComboBox:
         return QComboBox()
@@ -43,6 +46,9 @@ class QtpyWidgetsLib(QWidget):
     
     def create_grid_layout(self) -> QGridLayout:
         return QGridLayout()
+    
+    def bind_checkbox_event(self, checkbox : QCheckBox, event):
+        checkbox.stateChanged.connect(event)
     
     def bind_combobox_event(self, combo_box : QComboBox, event):
         combo_box.currentTextChanged.connect(event)
