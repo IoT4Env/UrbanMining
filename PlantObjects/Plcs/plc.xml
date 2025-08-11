@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-02T22:07:33">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-04T21:38:09">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -851,12 +851,12 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="W_PC_INT" address="%QW101">
+            <variable name="W_PC_INT" address="%QW100">
               <type>
                 <INT/>
               </type>
               <initialValue>
-                <simpleValue value="35"/>
+                <simpleValue value="0"/>
               </initialValue>
             </variable>
           </localVars>
@@ -871,7 +871,7 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="W_PILOT_STATUS" address="%QW111">
+            <variable name="W_PILOT_STATUS" address="%QW110">
               <type>
                 <INT/>
               </type>
@@ -891,7 +891,7 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="W_PILOT_FUNC" address="%QW112">
+            <variable name="W_PILOT_FUNC" address="%QW111">
               <type>
                 <INT/>
               </type>
@@ -923,7 +923,7 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="WEIGHT_H_ID" address="%QW102">
+            <variable name="WEIGHT_H_ID" address="%QW101">
               <type>
                 <INT/>
               </type>
@@ -931,7 +931,7 @@ END_IF;
                 <simpleValue value="3"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_H_PC" address="%QW103">
+            <variable name="WEIGHT_H_PC_INT" address="%QW102">
               <type>
                 <INT/>
               </type>
@@ -939,12 +939,12 @@ END_IF;
                 <simpleValue value="0"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_H_SETTING" address="%QW113">
+            <variable name="WEIGHT_H_SETTING" address="%QW112">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_H_STATUS" address="%QW114">
+            <variable name="WEIGHT_H_STATUS" address="%QW113">
               <type>
                 <INT/>
               </type>
@@ -952,12 +952,12 @@ END_IF;
                 <simpleValue value="0"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_H_DIRECTION" address="%QW115">
+            <variable name="WEIGHT_H_DIRECTION" address="%QW114">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_H_MATERIAL" address="%QW116">
+            <variable name="WEIGHT_H_MATERIAL" address="%QW115">
               <type>
                 <INT/>
               </type>
@@ -976,7 +976,7 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="WEIGHT_M_ID" address="%QW104">
+            <variable name="WEIGHT_M_ID" address="%QW103">
               <type>
                 <INT/>
               </type>
@@ -984,30 +984,30 @@ END_IF;
                 <simpleValue value="2"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_M_PC" address="%QW105">
+            <variable name="WEIGHT_M_PC_INT" address="%QW104">
               <type>
-                <REAL/>
+                <INT/>
               </type>
               <initialValue>
-                <simpleValue value="0.0"/>
+                <simpleValue value="0"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_M_SETTING" address="%QW117">
+            <variable name="WEIGHT_M_SETTING" address="%QW116">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_M_STATUS" address="%QW118">
+            <variable name="WEIGHT_M_STATUS" address="%QW117">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_M_DIRECTION" address="%QW119">
+            <variable name="WEIGHT_M_DIRECTION" address="%QW118">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_M_MATERIAL" address="%QW130">
+            <variable name="WEIGHT_M_MATERIAL" address="%QW119">
               <type>
                 <INT/>
               </type>
@@ -1026,7 +1026,7 @@ END_IF;
             </variable>
           </localVars>
           <localVars>
-            <variable name="WEIGHT_L_ID" address="%QW106">
+            <variable name="WEIGHT_L_ID" address="%QW105">
               <type>
                 <INT/>
               </type>
@@ -1034,30 +1034,30 @@ END_IF;
                 <simpleValue value="1"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_L_PC" address="%QW107">
+            <variable name="WEIGHT_L_PC_INT" address="%QW106">
               <type>
-                <REAL/>
+                <INT/>
               </type>
               <initialValue>
-                <simpleValue value="0.0"/>
+                <simpleValue value="0"/>
               </initialValue>
             </variable>
-            <variable name="WEIGHT_L_SETTING" address="%QW131">
+            <variable name="WEIGHT_L_SETTING" address="%QW130">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_L_STATUS" address="%QW132">
+            <variable name="WEIGHT_L_STATUS" address="%QW131">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_L_DIRECTION" address="%QW133">
+            <variable name="WEIGHT_L_DIRECTION" address="%QW132">
               <type>
                 <INT/>
               </type>
             </variable>
-            <variable name="WEIGHT_L_MATERIAL" address="%QW134">
+            <variable name="WEIGHT_L_MATERIAL" address="%QW133">
               <type>
                 <INT/>
               </type>
@@ -1066,10 +1066,7 @@ END_IF;
         </interface>
         <body>
           <ST>
-            <xhtml:p><![CDATA[(*based on remote input, the platform object changes it's parameters accordingly*)
-W_ID := 1;
-
-(*PLC REMOTE CONFIGURATION*)
+            <xhtml:p><![CDATA[(*WEIGHT PLC REMOTE CONFIGURATION*)
 CASE W_PILOT_STATUS OF
   0: W_STATUS := SHUT;
   1: W_STATUS := START;
@@ -1083,11 +1080,11 @@ END_CASE;
 (*PLC VARIABLES SET*)
 CASE W_STATUS OF
   SHUT: W_PC := 0.0;
+        W_PC_INT := REAL_TO_INT(W_PC * 10.0);
+        RETURN;(*CLOSE EVERYTHING ATTACHED TO THIS PLC IF W_STATUS = SHUT*)
   START: W_PC := 1.5;
+         W_PC_INT := REAL_TO_INT(W_PC * 10.0);
 END_CASE;
-
-(*INTEGER PC CONVERSION FOR MODBUS TO READ THE VALUE*)
-(*W_PC_INT := REAL_TO_INT(W_PC * 10.0);*)
 
 (*CHECK PLC STATUS BASED ON PC*)
 IF W_PC >= 8.0 THEN (*MAYBE USE A GLOBAL VARIABLE FOR THE PC LIMIT...*)
@@ -1112,13 +1109,12 @@ END_CASE;
 
 
 (*CALL WEIGHT PLATFORM FUNCTION*)
-
 W_WEIGHT_H_FB(
         IN := WEIGHT_H,
         OUT => WEIGHT_H);
 
 (*UPDATE PC*)
-WEIGHT_H_PC := REAL_TO_INT(WEIGHT_H.PC * 10.0);
+WEIGHT_H_PC_INT := REAL_TO_INT(WEIGHT_H.PC * 10.0);
 
 (*UPDATE STATUS*)
 CASE WEIGHT_H.STATUS OF
