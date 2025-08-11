@@ -1,11 +1,11 @@
 import sys
 sys.path.append("..")
 
-from  opcuaClientLib import opcuaClient
+from  opcuaClientLib import OpcuaClient
 import socket
 
 
-client = opcuaClient()
+client = OpcuaClient()
 
 hostname = socket.gethostname()
 
@@ -13,7 +13,7 @@ hostname = socket.gethostname()
 #node.get_children() -> return all node ids
 
 #the hostname variable avoids hardcoding the hostname and adapts the content based on the pc where the server is run from
-client.createClient(f"opc.tcp://{hostname}:4334/UA/UrbanMining")
+client.create_client(f"opc.tcp://{hostname}:4334/UA/UrbanMining")
 
 if __name__ == "__main__":
     try:
