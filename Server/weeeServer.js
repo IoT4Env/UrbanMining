@@ -13,15 +13,52 @@ import { OpcUaServer } from "./opcuaServerLib.js";
 
 
     //#region Enums definition
-    const Statuses = ["On", "Off", "Functioning", "Danger"]
-    const states = namespace.addEnumerationType({
-        browseName: "State",
-        enumeration: Statuses
+    const directions = ["Forward", "Backward"]
+    namespace.addEnumerationType({
+        browseName: "Directions",
+        enumeration: directions
+    })
+
+    const materials = ["Steel", "Copper", "Gold", "Stone", "Clay"]
+    namespace.addEnumerationType({
+        browseName: "Materials",
+        enumeration: materials
+    })
+
+    const settings = ["Automatic", "Manual"]
+    namespace.addEnumerationType({
+        browseName: "Settings",
+        enumeration: settings
+    })
+    
+    const status = ["On", "Off", "Functioning", "Danger"]
+    namespace.addEnumerationType({
+        browseName: "Status",
+        enumeration: status
+    })
+
+    const functionalities = ["Controller", "Separator"]
+    namespace.addEnumerationType({
+        browseName: "Functionalities",
+        enumeration: functionalities
+    })
+
+    const weights = ["High", "Medium", "Low"]
+    namespace.addEnumerationType({
+        browseName: "Weights",
+        enumeration: weights
     })
 
     //#endregion
 
     //#region  Type definition
+
+    //#region PlatformType
+    // const platformType = namespace.addObjectType({
+    //     browseName: 
+    // })
+
+    //#region PlcType
     const plcType = namespace.addObjectType({
         browseName: "PlcType"
     })
@@ -39,7 +76,7 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.String,
         modellingRule: "Mandatory",
-        value: {dataType: DataType.String, value: Statuses[2]}
+        value: {dataType: DataType.String, value: status[2]}
     })
 
     namespace.addVariable({
@@ -49,6 +86,8 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         modellingRule: "Mandatory",
         value: {dataType: DataType.Double, value: 15.4}
     })
+    //#endregion
+
     //#endregion
 
     const clensePlc = plcType.instantiate({
