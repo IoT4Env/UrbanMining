@@ -27,3 +27,25 @@ Note that the mentioned Factory is an abstraction of what a real WEEE Factory co
 
 Whith the OPC UA Diagram as a template, it is possible to create an OPC UA server from scratch using Programming Languages like Javascript, C#, and Python.
 This project uses the Javascript language for pure semplicity implemention purpouse, but any other languages mentional before is fine to obtain the same result.
+
+## Guide for connecting the client to the server
+
+The client used in this project is written in python, which needs the opcua library to function properly.\
+All the package specifications can be found in the ```requirements.txt``` file.\
+Before installing the packages, the creation of a virtual environment is recommended.\
+You can create the virtual environment inside the "Client" folder by running the following command:\
+
+```python3 -m venv venv```
+
+This will create a virtual environment named "venv" with the "venv" module.\
+Next, run the following command to activate the virtual environment:\
+
+```source venv/bin/activate```
+
+The name "venv" should be visible in the terminal inside braces like this: (venv).
+
+With this setup, run ```pip install -r requirements.txt``` and all the packages I am currently using will be installed in your virtual environmanet.\
+
+To deactivate the virtual environment, simply type ```deactivate``` in the terminal.\
+
+To completly remove the virtual enviroment, just delete the "venv" folder.\
