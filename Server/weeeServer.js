@@ -329,6 +329,53 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     })
     //#endregion
 
+    //#region SensorType
+    const sensorType = namespace.addObjectType({
+        browseName: "SensorType",
+        isAbstract: true
+    })
+
+    namespace.addVariable({
+        browseName: "Id",
+        componentOf: sensorType,
+        dataType: DataType.Int16,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "PowerConsuption",
+        componentOf: sensorType,
+        dataType: DataType.Double,
+        modellingRule: "Mandatory"
+    })
+    //#endregion
+
+    //#region PIC16F877AWeightType
+    const pic16F877AWeightType = namespace.addObjectType({
+        browseName: "PIC16F877AWeightType",
+        subtypeOf: sensorType
+    })
+
+    namespace.addObject({
+        browseName: "MainPlatform",
+        componentOf: pic16F877AWeightType,
+        typeDefinition: platformType,
+        modellingRule: "Mandatory"
+    })
+    //#endregion
+
+    //#region PIC16F877AMagneticType
+    const pic16F877AMagneticType = namespace.addObjectType({
+        browseName: "PIC16F877AMagneticType",
+        subtypeOf: sensorType
+    })
+
+    namespace.addObject({
+        browseName: "MainPlatform",
+        componentOf: pic16F877AMagneticType,
+        typeDefinition: platformType,
+        modellingRule: "Mandatory"
+    })
     //#endregion
 
     const clensePlc = plcType.instantiate({
