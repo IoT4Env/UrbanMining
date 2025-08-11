@@ -1,15 +1,16 @@
 #External libraries
-import socket, sys
+import sys
 
 #go down untile the reach of root project folder
 sys.path.append('../../')
 
 #Custom libraries
-from Resources import OpcuaClient
+from Resources import OpcuaClient, ConnConfig
 
 client = OpcuaClient()
+opcua_connection = ConnConfig()
 
-hostname = socket.gethostname()
+hostname = opcua_connection.host
 
 #some useful commands:
 #node.get_children() -> return all node ids
