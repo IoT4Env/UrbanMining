@@ -8,7 +8,7 @@ class ModbusClient:
         self.client.connect()
 
     def read_holding_registers(self, address:int, count:int = 1):
-        return self.client.read_holding_registers(address=address, count=count)
+        return self.client.read_holding_registers(address=address, count=count).registers[0:count]
 
     def write_register(self, address, value):
         self.client.write_register(address=address, value=value)
