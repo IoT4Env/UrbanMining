@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-09T09:08:44">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2025-04-19T20:38:53">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -21,7 +21,6 @@
           <enum>
             <values>
               <value name="SHUT"/>
-              <value name="START"/>
               <value name="OK"/>
               <value name="DANGER"/>
             </values>
@@ -44,6 +43,11 @@
             <variable name="ID">
               <type>
                 <INT/>
+              </type>
+            </variable>
+            <variable name="SHUTTED">
+              <type>
+                <BOOL/>
               </type>
             </variable>
             <variable name="PC">
@@ -162,6 +166,11 @@
                 <simpleValue value="4"/>
               </initialValue>
             </variable>
+            <variable name="C_SHUTTED">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
             <variable name="C_PILOT_STATUS">
               <type>
                 <INT/>
@@ -181,9 +190,6 @@
               <type>
                 <derived name="STATUSES"/>
               </type>
-              <initialValue>
-                <simpleValue value="SHUT"/>
-              </initialValue>
             </variable>
             <variable name="C_FUNC">
               <type>
@@ -408,24 +414,11 @@ C_WASTE_FB(
 C_WASTE_PC := C_WASTE.PC;
 
 (*Set C_STATUS based on remote input*)
-CASE C_PILOT_STATUS OF
-  0: C_STATUS := SHUT;
-  1: C_STATUS := START;
-END_CASE;
+
 
 (*logic for functionality status*)
 
 
-
-
-
-CASE C_STATUS OF
-        (*Imagine to read the power consuption of the PLC...*)
-  SHUT: C_PC_REAL := 0.0;
-        (*Need to cast the power consuption as an integer for the modbus to read it's value*)
-        C_PC_INT := REAL_TO_INT(C_PC_REAL * 10.0);
-  START: C_PC_REAL := C_PC_REAL + 0.7;
-END_CASE;
 ]]></xhtml:p>
           </ST>
         </body>
@@ -455,9 +448,6 @@ END_CASE;
               <type>
                 <derived name="STATUSES"/>
               </type>
-              <initialValue>
-                <simpleValue value="SHUT"/>
-              </initialValue>
             </variable>
             <variable name="D_PILOT_STATUS">
               <type>
@@ -675,6 +665,11 @@ END_CASE;
       <pou name="PLATFORM_FB" pouType="functionBlock">
         <interface>
           <inputVars>
+            <variable name="SHUTTED_IN">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
             <variable name="SETTING_IN">
               <type>
                 <INT/>
@@ -712,16 +707,13 @@ CASE SETTING_IN OF
   1: PLATFORM_IN.SETTING := AUTO;
 END_CASE;
 
-CASE STATUS_IN OF
-  0: PLATFORM_IN.STATUS := SHUT;
-  1: PLATFORM_IN.STATUS := START;
-END_CASE;
-
 (*SET PC BASED ON STATUS*)
-CASE PLATFORM_IN.STATUS OF
-  SHUT: PLATFORM_OUT.PC := 0.0;
-  START: PLATFORM_OUT.PC := 3.5;
-END_CASE;
+IF SHUTTED_IN THEN
+  PLATFORM_OUT.PC := 0.0;
+  RETURN;
+ELSE
+  PLATFORM_OUT.PC := 3.5;
+END_IF;
 
 (*SET STATUS TO DANGER IF SOMETHING IS NOT NORMAL*)
 IF PLATFORM_IN.PC >= 10.0 THEN
@@ -732,8 +724,8 @@ END_IF;
 
 (*UPDATE STATUS FOR MODBUS*)
 CASE PLATFORM_OUT.STATUS OF
-  OK: STATUS_OUT := 2;
-  DANGER: STATUS_OUT := 3;
+  OK: STATUS_OUT := 0;
+  DANGER: STATUS_OUT := 1;
 END_CASE;
 
 
@@ -765,9 +757,6 @@ END_CASE;
               <type>
                 <derived name="STATUSES"/>
               </type>
-              <initialValue>
-                <simpleValue value="SHUT"/>
-              </initialValue>
             </variable>
             <variable name="S_PILOT_STATUS">
               <type>
@@ -871,10 +860,13 @@ END_CASE;
                 <simpleValue value="1"/>
               </initialValue>
             </variable>
-            <variable name="W_SHUTTED" address="%QX1.0">
+            <variable name="W_OPENED" address="%QX0.0">
               <type>
                 <BOOL/>
               </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
             </variable>
           </localVars>
           <localVars>
@@ -902,9 +894,6 @@ END_CASE;
               <type>
                 <derived name="STATUSES"/>
               </type>
-              <initialValue>
-                <simpleValue value="SHUT"/>
-              </initialValue>
             </variable>
           </localVars>
           <localVars>
@@ -966,6 +955,15 @@ END_CASE;
                 <simpleValue value="3"/>
               </initialValue>
             </variable>
+          </localVars>
+          <localVars>
+            <variable name="WEIGHT_H_SHUTTED">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </localVars>
+          <localVars>
             <variable name="WEIGHT_H_PC_INT" address="%QW103">
               <type>
                 <INT/>
@@ -1014,6 +1012,15 @@ END_CASE;
                 <simpleValue value="2"/>
               </initialValue>
             </variable>
+          </localVars>
+          <localVars>
+            <variable name="WEIGHT_M_SHUTTED">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </localVars>
+          <localVars>
             <variable name="WEIGHT_M_PC_INT" address="%QW105">
               <type>
                 <INT/>
@@ -1059,6 +1066,15 @@ END_CASE;
                 <simpleValue value="1"/>
               </initialValue>
             </variable>
+          </localVars>
+          <localVars>
+            <variable name="WEIGHT_L_SHUTTED">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </localVars>
+          <localVars>
             <variable name="WEIGHT_L_PC_INT" address="%QW107">
               <type>
                 <INT/>
@@ -1098,11 +1114,8 @@ WEIGHT_H_PC_INT := REAL_TO_INT(WEIGHT_H.PC * 10.0);
 WEIGHT_M_PC_INT := REAL_TO_INT(WEIGHT_M.PC * 10.0);
 WEIGHT_L_PC_INT := REAL_TO_INT(WEIGHT_L.PC * 10.0);
 
+
 (*WEIGHT PLC REMOTE CONFIGURATION*)
-CASE W_PILOT_STATUS OF
-  0: W_STATUS := SHUT;
-  1: W_STATUS := START;
-END_CASE;
 
 CASE W_PILOT_FUNC OF
   0: W_FUNC := CONTROLLER;
@@ -1110,23 +1123,30 @@ CASE W_PILOT_FUNC OF
 END_CASE;
 
 (*PLC VARIABLES SET*)
-CASE W_STATUS OF
-  SHUT: W_SHUTTED := ShutPlcComponents(
-         PLC_PC => W_PC,
-         PLATFORM1_PC => WEIGHT_H.PC,
-         PLATFORM2_PC => WEIGHT_M.PC,
-         PLATFORM3_PC => WEIGHT_L.PC);
-        RETURN;(*CLOSE EVERYTHING ATTACHED TO THIS PLC IF W_STATUS = SHUT*)
-  START: W_PC := 1.5;
-END_CASE;
-W_SHUTTED := FALSE;
+(*NORMALY OPEN IS THE SAFETY APPROACH IN A REAL WORLD SCENARIO*)
+IF NOT W_OPENED THEN
+  W_STATUS := ShutPlcComponents(
+    PLC_PC => W_PC,
+    PLATFORM1_PC => WEIGHT_H.PC,
+    PLATFORM2_PC => WEIGHT_M.PC,
+    PLATFORM3_PC => WEIGHT_L.PC);
+    (*CLOSE EVERYTHING ATTACHED TO THIS PLC*)
+ELSE
+  W_PC := 1.5;
+  W_STATUS := OK;
+END_IF;
 
 (*CHECK PLC STATUS BASED ON PC*)
 IF W_PC >= 8.0 THEN (*MAYBE USE A GLOBAL VARIABLE FOR THE PC LIMIT...*)
   W_STATUS := DANGER;
-ELSE
-  W_STATUS := OK;
 END_IF;
+
+(*MAP STATUS DATA TYPE WITH A UNIQUE NUMBER*)
+CASE W_STATUS OF
+  SHUT: W_CURRENT_STATUS := 0;
+  OK: W_CURRENT_STATUS := 1;
+  DANGER: W_CURRENT_STATUS := 2;
+END_CASE;
 
 (*CONTROL PLATFORMS ATTACHED TO THIS PLC*)
 WEIGHT_FB(
@@ -1170,7 +1190,7 @@ WEIGHT_FB(
       <pou name="ShutPlcComponents" pouType="function">
         <interface>
           <returnType>
-            <BOOL/>
+            <derived name="STATUSES"/>
           </returnType>
           <outputVars>
             <variable name="PLC_PC">
@@ -1202,7 +1222,8 @@ PLATFORM1_PC := 0.0;
 PLATFORM2_PC := 0.0;
 PLATFORM3_PC := 0.0;
 
-SHUTPLCCOMPONENTS := TRUE;]]></xhtml:p>
+SHUTPLCCOMPONENTS := SHUT;
+]]></xhtml:p>
           </ST>
         </body>
       </pou>
