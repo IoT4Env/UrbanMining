@@ -2,8 +2,15 @@ DrawioDiagrams/*.bkp
 Server/node_modules
 
 #python virtual environment and cache folders
-PythonClients/venv
+PythonClients/venv*
 PythonClients/__pycache__
+PlantObjects/SCADA/venv*
+PlantObjects/SCADA/__pycache__
+
+#ignore small automation shell scripts
+#(they contain just the instruction to activate the venvs)
+PythonClients/*.sh
+PlantObjects/SCADA/*.sh
 
 #openplc folders to ignore
 PlantObjects/Plcs/build

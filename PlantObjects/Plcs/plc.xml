@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2024-08-18T12:18:40"/>
-  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-05T21:02:49">
+  <contentHeader name="WEEE_PLCs" modificationDateTime="2024-09-07T22:09:25">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -98,9 +98,9 @@
         <baseType>
           <enum>
             <values>
-              <value name="H"/>
-              <value name="M"/>
               <value name="L"/>
+              <value name="M"/>
+              <value name="H"/>
             </values>
           </enum>
         </baseType>
