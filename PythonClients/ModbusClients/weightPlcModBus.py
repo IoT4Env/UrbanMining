@@ -1,5 +1,5 @@
 import sys
-sys.path.append("..")
+sys.path.append("..")#get modules outside of current directory
 
 from  modbusClientLib import ModbusClient
 import socket
@@ -7,8 +7,8 @@ import socket
 import json
 
 
-def load_address_translation():
-    with open('../../Resources/addressTranslation.json') as f:
+def load_json(path: str):
+    with open(path) as f:
         return json.load(f)
 
 slave_address = socket.gethostbyname(socket.gethostname())
@@ -17,14 +17,16 @@ port = 502
 weight_plc = ModbusClient(slave_address, port)
 
 if __name__ == '__main__':
-    #read json for variable address translation
-    plcs = load_address_translation()
-    print(plcs['WEIGHT_PLC']['ID'])
+    #read json for variable address translation and enumerables
+    address_translation = load_json('../../Resources/addressTranslation.json')
+    enumerables = load_json('../../Resources/enumerables.json')
+
+    print(address_translation['WEIGHT_PLC']['ID'])
 
     weight_plc.connect()
     print(f'now connected with {weight_plc.client}')
 
-    id = weight_plc.read_holding_registers(plcs["WEIGHT_PLC"]["ID"])
+    id = weight_plc.read_holding_registers(address_translation["WEIGHT_PLC"]["ID"])
     print(f'Reading data from PLC number {id.registers}')
 
     #Set plc status to Start
