@@ -20,6 +20,10 @@ export class OpcUaServer {
         await this.server.initialize()
     }
 
+    getAddressSpace =  _ => {
+        return this.server.engine.addressSpace
+    }
+
     startServer = async _ => {
         await this.server.start()
         const endpointUrl = this.server.getEndpointUrl();
@@ -32,10 +36,5 @@ export class OpcUaServer {
             console.log('shutting down')
             this.server.shutdown()
         })
-    }
-
-    getOwnNamespace =  _ => {
-        const addressSpace = this.server.engine.addressSpace
-        return addressSpace.getOwnNamespace();
     }
 }
