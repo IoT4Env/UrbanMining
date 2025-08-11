@@ -1,4 +1,11 @@
 DrawioDiagrams/*.bkp
 Server/node_modules
-Client/venv
-Client/__pycache__
+
+#python virtual environment and cache folders
+PythonClients/venv
+PythonClients/__pycache__
+
+#openplc folders to ignore
+PlantObjects/Plcs/build
+PlantObjects/Plcs/project_files
+PlantObjects/Plcs/*.st
