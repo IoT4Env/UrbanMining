@@ -50,6 +50,16 @@ if __name__ == '__main__':
         statuses_combo_box.addItem(key)
     statuses_combo_box.setCurrentIndex(statuses['SHUT'])
 
+    def plc_statuses():
+        status = statuses_combo_box.currentText()
+        w_plc_mb.write_register(weight_plc_map['PILOT_STATUS'], enumerables['STATUSES'][status.upper()])
+        print(f'PLC status set to: {status}')
+        w_pc_mb = w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
+        w_pc_value.setText(f'{str(w_pc_mb[0])} W')
+
+
+    statuses_combo_box.currentTextChanged.connect(plc_statuses)
+
     settings_combo_box = QComboBox()
     settings = enumerables['SETTINGS']
     for key, value in settings.items():
