@@ -33,3 +33,10 @@ class QtpyWidgetsLib:
     
     def create_grid_layout(self) -> QGridLayout:
         return QGridLayout()
+    
+    def bind_combobox_event(self, combo_box : QComboBox, event):
+        combo_box.currentTextChanged.connect(event)
+
+    def bind_push_button_event(self, push_button : QPushButton, event):
+        push_button.clicked.connect(event)
+    

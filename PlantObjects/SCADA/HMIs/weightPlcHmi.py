@@ -16,31 +16,61 @@ port = modbus_connection.port
 #Create HandleJson object
 json_helper = HandleJsonLib()
 
-def platform_ui():
+
+
+#In the future might put below functions inside a class (one class for each type of HMI)
+def read_initial_registers():
+    #Configure modbus register reading for data gathered from this PLC
+   return {
+       "w_pc_mb": w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
+   } 
+
+
+def go_to_platform_ui():
     #add code to change window with the specified platform data
-    print('Plc started successfully')
+    print('UI changed')
+
+
+def w_statuses():
+    status = statuses_combo_box.currentText()
+    w_plc_mb.write_register(weight_plc_map['PILOT_STATUS'], enumerables['STATUSES'][status.upper()])
+    print(f'PLC status set to: {status}')
+    w_pc_mb = w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
+    #"w_pc_value" is defined inside main
+    w_pc_value.setText(f'{str(w_pc_mb[0])} W')
 
 
 if __name__ == '__main__':
     #Weight modbus connection
     w_plc_mb = ModbusClientLib(address, port)
     print(f'Now connected with {w_plc_mb.client}')
-    #Now we can use the modbus functionalities
-
+    #Connection succeded
+    
     #JSON resources
     weight_plc_map = json_helper.load_json('addressTranslation.json')['WEIGHT_PLC']
     enumerables = json_helper.load_json('enumerables.json')
+
+
+    #Get initial plc values
+    #This approch is prefered over defining constant values at startup, because hard-coded values do not represent the real state of PLC variables
+    initial_registers = read_initial_registers()
+    w_pc_mb = initial_registers["w_pc_mb"]
+
+
 
     #Below code is the UI for the plc itself
     #Initialize weight hmi application
     w_hmi = QtpyWidgetsLib()
 
 
-    #Create labels
+    #Create static labels
     w_plc = w_hmi.create_label('Weight_PLC')
     w_status = w_hmi.create_label('Status: ')
     w_setting = w_hmi.create_label('Setting: ')
     w_pc_label = w_hmi.create_label('Power consuption: ')
+    
+    #Create dynamic labels
+    w_pc_value = w_hmi.create_label(f'{str(w_pc_mb[0])} W')
     #more stuff...
 
     #Create combo boxes for senting commands
@@ -50,15 +80,7 @@ if __name__ == '__main__':
         statuses_combo_box.addItem(key)
     statuses_combo_box.setCurrentIndex(statuses['SHUT'])
 
-    def plc_statuses():
-        status = statuses_combo_box.currentText()
-        w_plc_mb.write_register(weight_plc_map['PILOT_STATUS'], enumerables['STATUSES'][status.upper()])
-        print(f'PLC status set to: {status}')
-        w_pc_mb = w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
-        w_pc_value.setText(f'{str(w_pc_mb[0])} W')
-
-
-    statuses_combo_box.currentTextChanged.connect(plc_statuses)
+    w_hmi.bind_combobox_event(statuses_combo_box, w_statuses)
 
     settings_combo_box = w_hmi.create_combo_box()
     settings = enumerables['SETTINGS']
@@ -66,17 +88,19 @@ if __name__ == '__main__':
         settings_combo_box.addItem(key)
     settings_combo_box.setCurrentIndex(settings['MANUAL'])
 
-    #Create labels for reading data gatherd from PLC
-    w_pc_mb = w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
-    w_pc_value = w_hmi.create_label(f'{str(w_pc_mb[0])} W')
 
     #Create buttons
-    platH_button = w_hmi.create_push_button('Platform_H')
-    platH_button.clicked.connect(platform_ui)
+    plat_h_button = w_hmi.create_push_button('Platform_H')
+    w_hmi.bind_push_button_event(plat_h_button, go_to_platform_ui)
 
-    platM_button = w_hmi.create_push_button('Platform_M')
 
-    platL_button = w_hmi.create_push_button('Platform_L')
+    plat_m_button = w_hmi.create_push_button('Platform_M')
+    w_hmi.bind_push_button_event(plat_m_button, go_to_platform_ui)
+
+
+    plat_l_button = w_hmi.create_push_button('Platform_L')
+    w_hmi.bind_push_button_event(plat_l_button, go_to_platform_ui)
+
 
     #Create HORIZONTAL layouts
     status_layout = w_hmi.create_horizontal_box_layout()
@@ -92,9 +116,9 @@ if __name__ == '__main__':
     pc_layout.addWidget(w_pc_value)
 
     platforms_layout = w_hmi.create_horizontal_box_layout()
-    platforms_layout.addWidget(platH_button)
-    platforms_layout.addWidget(platM_button)
-    platforms_layout.addWidget(platL_button)
+    platforms_layout.addWidget(plat_h_button)
+    platforms_layout.addWidget(plat_m_button)
+    platforms_layout.addWidget(plat_l_button)
     #REMENBER TO ADD VALUE OF POWER CONSUPTION!!!
 
     #Set layouts to widget
