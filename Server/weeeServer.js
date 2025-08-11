@@ -157,6 +157,47 @@ import { OpcUaServer } from "./opcuaServerLib.js";
 
     //#endregion
 
+    //#region ShreaderType
+    const shreader = namespace.addObjectType({
+        browseName: "Shreader"
+    })
+
+    namespace.addVariable({
+        browseName: "Setting",
+        componentOf: shreader,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Id",
+        componentOf: shreader,
+        dataType: DataType.Int16,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Status",
+        componentOf: shreader,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "WEEEWeight",
+        componentOf: shreader,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "PowerConsuption",
+        componentOf: shreader,
+        dataType: DataType.Double,
+        modellingRule: "Mandatory"
+    })
+    //#endregion
+
     //#region PlcType
     const plcType = namespace.addObjectType({
         browseName: "PlcType"
