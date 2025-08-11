@@ -1,9 +1,7 @@
 {
     "STATUSES": {
-        "SHUT": 0,
-        "START": 1,
-        "OK": 2,
-        "DANGER": 3
+        "OK" : 0,
+        "DANGER": 1
     },
     "FUNCTIONALITIES": {
         "CONTROLLER": 0,

@@ -1,7 +1,7 @@
 {
     "W": {
         "ID": 1,
-        "SHUTTED": 1.0,
+        "OPENED": 0,
         "PC_INT": 100,
         "PILOT_STATUS": 110,
         "CURRENT_STATUS": 101,
