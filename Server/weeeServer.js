@@ -252,6 +252,83 @@ import { OpcUaServer } from "./opcuaServerLib.js";
     })
     //#endregion
 
+    //#region StoreType
+    const storeType = namespace.addVariableType({
+        browseName: "StoreType",
+        isAbstract: true
+    })
+    //#endregion
+
+    //#region WEEEStoreType
+    const weeeStoreType = namespace.addVariableType({
+        browseName: "WEEEStoreType",
+        subtypeOf: storeType
+    })
+
+    namespace.addVariable({
+        browseName: "Id",
+        componentOf: weeeStoreType,
+        dataType: DataType.Int16,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Pieces",
+        componentOf: weeeStoreType,
+        dataType: DataType.Int64,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "GatherPeriod",
+        componentOf: weeeStoreType,
+        dataType: DataType.DateTime,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "StoragePeriod",
+        componentOf: weeeStoreType,
+        dataType: DataType.DateTime,
+        modellingRule: "Mandatory"
+    })
+    //#endregion
+
+    //#region MaterialStoreType
+    const materialStoreType = namespace.addVariableType({
+        browseName: "MaterialStoreType",
+        subtypeOf: storeType
+    })
+
+    namespace.addVariable({
+        browseName: "Id",
+        componentOf: materialStoreType,
+        dataType: DataType.Int16,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "StoragePeriod",
+        componentOf: materialStoreType,
+        dataType: DataType.DateTime,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "WorkingMaterial",
+        componentOf: materialStoreType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory"
+    })
+
+    namespace.addVariable({
+        browseName: "Quantity",
+        componentOf: materialStoreType,
+        dataType: DataType.Double,
+        modellingRule: "Mandatory"
+    })
+    //#endregion
+
     //#endregion
 
     const clensePlc = plcType.instantiate({
