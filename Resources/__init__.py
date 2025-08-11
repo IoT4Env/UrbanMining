@@ -1,0 +1,2 @@
+from Resources.PythonLibs.modbusClientLib import ModbusClient
+from Resources.PythonLibs.opcuaClientLib import OpcuaClient

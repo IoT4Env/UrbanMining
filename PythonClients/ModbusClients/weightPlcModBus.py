@@ -1,51 +1,59 @@
-import sys
-sys.path.append("..")#get modules outside of current directory
+#External libraries
+import socket, json, sys
 
-from  modbusClientLib import ModbusClient
-import socket
+#go down untile the reach of root project folder
+sys.path.append('../../')
 
-import json
+#Custom libraries
+from Resources import ModbusClient
 
+
+#Add below 2 lines in a separate file for credentials and connections
+slave_address = socket.gethostbyname(socket.gethostname())
+port = 502
 
 def load_json(path: str):
     with open(path) as f:
         return json.load(f)
 
-slave_address = socket.gethostbyname(socket.gethostname())
-port = 502
+#Probably better to use a separate file just in case...
+def write_to_opcua():
+    print('logic for inserting stuff on the opcua server')
 
-weight_plc = ModbusClient(slave_address, port)
 
+#Code below is used to send data to the OPC UA server
 if __name__ == '__main__':
     #read json for variable address translation and enumerables
-    weight_plc_map = load_json('../../Resources/addressTranslation.json')['WEIGHT_PLC']
-    enumerables = load_json('../../Resources/enumerables.json')
+    w_plc_map = load_json('../../Resources/Json/addressTranslation.json')['WEIGHT_PLC']
+    enumerables = load_json('../../Resources/Json/enumerables.json')
 
-    weight_plc.connect()
-    print(f'Now connected with {weight_plc.client}')
-
-    id = weight_plc.read_holding_registers(weight_plc_map["ID"])
-    print(f'Reading data from PLC number {id.registers}')
-
-    #Set plc status to Start
-    weight_plc.write_register(weight_plc_map['PILOT_STATUS'], enumerables['STATUSES']['START'])
-    plc_status = weight_plc.read_holding_registers(weight_plc_map['PILOT_STATUS'])
-    print(f'Weight PLC status set to: {plc_status.registers}')
-
-    #read power consuption of plc and see that it changed!
-    plc_pc = weight_plc.read_holding_registers(weight_plc_map['PC_INT'])
-    print(f'Weight PLC power consuption is: {plc_pc.registers}')
+    #Create weight plc modbus and connect to socket
+    w_plc = ModbusClient(slave_address, port)
+    try:
+        print(f'Now connected with {w_plc.client}')
+        #Procedures to write data to the opcua server
+    finally:
+        w_plc.close()
 
 
-    #control platforms attached to this plc
-    #starting from the weight_h platform
-    weight_plc.write_register(weight_plc_map['WEIGHT_H']['STATUS'], enumerables['STATUSES']['START'])
-    weight_h_status = weight_plc.read_holding_registers(weight_plc_map['WEIGHT_H']['STATUS'])
-    print(f'Current status of weight high platform is: {weight_h_status.registers}')
 
-    #read changed power consuption
-    weight_h_pc = weight_plc.read_holding_registers(weight_plc_map['WEIGHT_H']['PC_INT'])
-    print(f'Weight hight power consuption is: {weight_h_pc.registers}')
 
-    weight_plc.close()
+    # plc_status = w_plc.read_holding_registers(w_plc_map['CURRENT_STATUS'])
+    # print(f'Weight PLC status set to: {plc_status.registers}')
+
+    # #read power consuption of plc and see that it changed!
+    # plc_pc = w_plc.read_holding_registers(w_plc_map['PC_INT'])
+    # print(f'Weight PLC power consuption is: {plc_pc.registers}')
+
+
+    # #control platforms attached to this plc
+    # #starting from the weight_h platform
+    # w_plc.write_register(w_plc_map['WEIGHT_H']['STATUS'], enumerables['STATUSES']['START'])
+    # weight_h_status = w_plc.read_holding_registers(w_plc_map['WEIGHT_H']['STATUS'])
+    # print(f'Current status of weight high platform is: {weight_h_status.registers}')
+
+    # #read changed power consuption
+    # weight_h_pc = w_plc.read_holding_registers(w_plc_map['WEIGHT_H']['PC_INT'])
+    # print(f'Weight hight power consuption is: {weight_h_pc.registers}')
+
 

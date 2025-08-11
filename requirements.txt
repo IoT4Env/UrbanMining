@@ -5,3 +5,8 @@ pyModbusTCP==0.2.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
 six==1.16.0
+packaging==24.1
+PyQt5==5.15.11
+PyQt5-Qt5==5.15.14
+PyQt5_sip==12.15.0
+QtPy==2.4.1
