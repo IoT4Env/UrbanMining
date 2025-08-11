@@ -6,16 +6,16 @@ import sys
 sys.path.append('../../../')
 
 #Custom libraries
-from Resources import ModbusClient, ConnConfig, LoadJson
+from Resources import ModbusClientLib, ConnConfigLib, JsonHelperLib, QtpyWidgetsLib, QtCoreLib
 
 
 #Configure modbus connection
-modbus_connection = ConnConfig()
+modbus_connection = ConnConfigLib()
 address = modbus_connection.host
 port = modbus_connection.port
 
-#Create LoadJson object
-json_helper = LoadJson()
+#Create JsonHelperLib object
+json_helper = JsonHelperLib()
 
 def platform_ui():
     #add code to change window with the specified platform data
@@ -24,7 +24,7 @@ def platform_ui():
 
 if __name__ == '__main__':
     #Weight modbus connection
-    w_plc_mb = ModbusClient(address, port)
+    w_plc_mb = ModbusClientLib(address, port)
     print(f'Now connected with {w_plc_mb.client}')
     #Now we can use the modbus functionalities
 
@@ -34,14 +34,23 @@ if __name__ == '__main__':
 
     #Below code is the UI for the plc itself
     #Initialize application
-    app = QApplication([])
+    w_hmi = QtpyWidgetsLib([])
 
-    #Create labels
-    w_plc = QLabel('Weight_PLC')
-    w_status = QLabel('Status: ')
-    w_setting = QLabel('Setting: ')
-    w_pc_label = QLabel('Power consuption: ')
+    #Create static labels
+    w_plc_title = w_hmi.create_label(f'Weight_PLC [{weight_plc_map["ID"]}]')
+    w_status = w_hmi.create_label('Status: ')
+    w_setting = w_hmi.create_label('Setting: ')
+    w_pc_label = w_hmi.create_label('Power consuption: ')
+
+    #Create dynamic labels
+    w_pc_mb = w_plc_mb.read_holding_registers(weight_plc_map['PC_INT'])
+    w_pc_value = w_hmi.create_label(f'{str(w_pc_mb[0])} W')
     #more stuff...
+
+
+    #Adjust alignments
+    w_plc_title.setAlignment(QtCoreLib.alignment_flags.AlignCenter)
+
 
     #Create combo boxes for senting commands
     statuses_combo_box = QComboBox()
@@ -80,7 +89,10 @@ if __name__ == '__main__':
     platL_button = QPushButton('Platform_L')
 
     #Create HORIZONTAL layouts
-    status_layout = QHBoxLayout()
+    title_layout = w_hmi.create_horizontal_box_layout()
+    title_layout.addWidget(w_plc_title)
+
+    status_layout = w_hmi.create_horizontal_box_layout()
     status_layout.addWidget(w_status)
     status_layout.addWidget(statuses_combo_box)
 
@@ -98,8 +110,12 @@ if __name__ == '__main__':
     platforms_layout.addWidget(platL_button)
     #REMENBER TO ADD VALUE OF POWER CONSUPTION!!!
 
+
     #Set layouts to widget
-    status_widget = QWidget()
+    title_widget = w_hmi.create_widget()
+    title_widget.setLayout(title_layout)
+
+    status_widget = w_hmi.create_widget()
     status_widget.setLayout(status_layout)
 
     setting_widget = QWidget()
@@ -112,28 +128,38 @@ if __name__ == '__main__':
     platforms_widget.setLayout(platforms_layout)
 
     #Create grid
-    w_plc_grid = QGridLayout()
+    w_plc_grid_layout = w_hmi.create_grid_layout()
     #widget, row_index, column_index
-    w_plc_grid.addWidget(status_widget, 0, 0)
-    w_plc_grid.addWidget(setting_widget, 1, 0)
-    w_plc_grid.addWidget(pc_widget, 0, 1)
-    #more stuff here, hopefully...
+    w_plc_grid_layout.addWidget(status_widget, 0, 0)
+    w_plc_grid_layout.addWidget(setting_widget, 1, 0)
+    w_plc_grid_layout.addWidget(pc_widget, 0, 1)
+    #more stuff here...
 
+    
     #Combine grid and platforms
-    w_plc_ui = QVBoxLayout()
-    w_plc_ui.addWidget(w_plc)
-    w_plc_ui.addLayout(w_plc_grid)
-    w_plc_ui.addWidget(platforms_widget)
+    w_plc_layout = w_hmi.create_vertical_box_layout()
+    w_plc_layout.addWidget(title_widget)
+    w_plc_layout.addLayout(w_plc_grid_layout)
+    w_plc_layout.addWidget(platforms_widget)
+
 
     #Set main widget
-    main_widget = QWidget()
-    main_widget.setLayout(w_plc_ui)
+    main_widget = w_hmi.create_widget()
+    main_widget.setLayout(w_plc_layout)
 
-    #Show window
-    main_widget.show()
+
+
+    #Create widget tabs
+    w_widget_tabs = w_hmi.create_tab(w_plc_layout, "Tab name")
+
+    
+
+    #Show main widget
+    # w_hmi_window = HmiWindow("title")
+    
 
     # Start 'event loop'
-    app.exec_()
+    w_hmi.start_event_loop_()
 
     #Close Modbus when execution finishes
     w_plc_mb.close()

@@ -1,4 +1,6 @@
-from Resources.PythonLibs.modbusClientLib import ModbusClient
-from Resources.PythonLibs.opcuaClientLib import OpcuaClient
-from Resources.PythonLibs.connConfig import ConnConfig
-from Resources.PythonLibs.loadJson import LoadJson
+from Resources.PythonLibs.modbusClientLib import ModbusClientLib
+from Resources.PythonLibs.opcuaClientLib import OpcuaClientLib
+from Resources.PythonLibs.connConfigLib import ConnConfigLib
+from Resources.PythonLibs.jsonHelperLib import JsonHelperLib
+from Resources.PythonLibs.qtpyWidgetsLib import QtpyWidgetsLib, QtCoreLib, QtpyMainWindowLib, QtpyMainWindowLib
+from Resources.PythonLibs.weightHmiLib import WeightHmiWindowLib, WeightHmiWidgetsLib
