@@ -13,10 +13,10 @@ import { OpcUaServer } from "./opcuaServerLib.js";
 
 
     //#region Enums definition
-    const weightEnum = ["High", "Medium", "Low"]
-    const weightPlatforms = namespace.addEnumerationType({
-        browseName: "Weights",
-        enumeration: weightEnum
+    const Statuses = ["On", "Off", "Functioning", "Danger"]
+    const states = namespace.addEnumerationType({
+        browseName: "State",
+        enumeration: Statuses
     })
 
     //#endregion
@@ -31,7 +31,15 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.Int16,
         modellingRule: "Mandatory",
-        value:{dataType: DataType.Int16, value: 24}
+        value: {dataType: DataType.Int16, value: 15}
+    })
+
+    namespace.addVariable({
+        browseName: "State",
+        componentOf: plcType,
+        dataType: DataType.String,
+        modellingRule: "Mandatory",
+        value: {dataType: DataType.String, value: Statuses[2]}
     })
 
     namespace.addVariable({
@@ -39,7 +47,7 @@ import { OpcUaServer } from "./opcuaServerLib.js";
         componentOf: plcType,
         dataType: DataType.Double,
         modellingRule: "Mandatory",
-        value:{dataType: DataType.Double, value: 12.4}
+        value: {dataType: DataType.Double, value: 15.4}
     })
     //#endregion
 
