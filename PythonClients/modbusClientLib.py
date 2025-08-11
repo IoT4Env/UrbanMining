@@ -16,8 +16,6 @@ class ModbusClient:
     def write_register(self, address, value):
         self.client.write_register(address=address, value=value)
         
-
-    
     def close(self):
         self.client.close()
 

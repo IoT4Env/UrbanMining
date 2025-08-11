@@ -4,6 +4,12 @@ sys.path.append("..")
 from  modbusClientLib import ModbusClient
 import socket
 
+import json
+
+
+def load_address_translation():
+    with open('../../Resources/addressTranslation.json') as f:
+        return json.load(f)
 
 slave_address = socket.gethostbyname(socket.gethostname())
 port = 502
@@ -11,10 +17,14 @@ port = 502
 weight_plc = ModbusClient(slave_address, port)
 
 if __name__ == '__main__':
+    #read json for variable address translation
+    plcs = load_address_translation()
+    print(plcs['WEIGHT_PLC']['ID'])
+
     weight_plc.connect()
     print(f'now connected with {weight_plc.client}')
 
-    id = weight_plc.read_holding_registers(1)
+    id = weight_plc.read_holding_registers(plcs["WEIGHT_PLC"]["ID"])
     print(f'Reading data from PLC number {id.registers}')
 
     #Set plc status to Start
